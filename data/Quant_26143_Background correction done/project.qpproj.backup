@@ -1,0 +1,874 @@
+{
+  "version": "0.5.0",
+  "createTimestamp": 1723721791993,
+  "modifyTimestamp": 1723721791993,
+  "uri": "file:////forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Papers%20and%20manuscripts/2024_5_Bnip3%20expression%20in%20AD%20rats/Quant_26143/project.qpproj",
+  "lastID": 9,
+  "images": [
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/Additional%20scans%20Aug%202024/26143_Bnip3_DAB_1of2.czi",
+        "args": [
+          "--series",
+          "0"
+        ],
+        "metadata": {
+          "name": "26143_Bnip3_DAB_1of2.czi - Scene #1",
+          "width": 78590,
+          "height": 45601,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 78590,
+              "height": 45601
+            },
+            {
+              "downsample": 2.0,
+              "width": 39295,
+              "height": 22800
+            },
+            {
+              "downsample": 4.0,
+              "width": 19647,
+              "height": 11400
+            },
+            {
+              "downsample": 8.0,
+              "width": 9823,
+              "height": 5700
+            },
+            {
+              "downsample": 16.0,
+              "width": 4911,
+              "height": 2850
+            },
+            {
+              "downsample": 32.0,
+              "width": 2455,
+              "height": 1425
+            },
+            {
+              "downsample": 64.0,
+              "width": 1227,
+              "height": 712
+            },
+            {
+              "downsample": 128.0,
+              "width": 613,
+              "height": 356
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21999999999999997,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21999999999999997,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 1,
+      "randomizedName": "c204729f-8dfb-493a-8d84-172265e05b81",
+      "imageName": "26143_Bnip3_DAB_1of2.czi - Scene #1",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/Additional%20scans%20Aug%202024/26143_Bnip3_DAB_1of2.czi",
+        "args": [
+          "--series",
+          "1"
+        ],
+        "metadata": {
+          "name": "26143_Bnip3_DAB_1of2.czi - Scene #2",
+          "width": 26165,
+          "height": 46782,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 26165,
+              "height": 46782
+            },
+            {
+              "downsample": 2.0,
+              "width": 13082,
+              "height": 23391
+            },
+            {
+              "downsample": 4.0,
+              "width": 6541,
+              "height": 11695
+            },
+            {
+              "downsample": 8.0,
+              "width": 3270,
+              "height": 5847
+            },
+            {
+              "downsample": 16.0,
+              "width": 1635,
+              "height": 2923
+            },
+            {
+              "downsample": 32.0,
+              "width": 817,
+              "height": 1461
+            },
+            {
+              "downsample": 64.0,
+              "width": 408,
+              "height": 730
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21999999999999997,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21999999999999997,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 2,
+      "randomizedName": "b302bff1-8b9a-4777-a842-f2b766c865dd",
+      "imageName": "26143_Bnip3_DAB_1of2.czi - Scene #2",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/Additional%20scans%20Aug%202024/26143_Bnip3_DAB_1of2.czi",
+        "args": [
+          "--series",
+          "2"
+        ],
+        "metadata": {
+          "name": "26143_Bnip3_DAB_1of2.czi - Scene #3",
+          "width": 20532,
+          "height": 42384,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 20532,
+              "height": 42384
+            },
+            {
+              "downsample": 2.0,
+              "width": 10266,
+              "height": 21192
+            },
+            {
+              "downsample": 4.0,
+              "width": 5133,
+              "height": 10596
+            },
+            {
+              "downsample": 8.0,
+              "width": 2566,
+              "height": 5298
+            },
+            {
+              "downsample": 16.0,
+              "width": 1283,
+              "height": 2649
+            },
+            {
+              "downsample": 32.0,
+              "width": 641,
+              "height": 1324
+            },
+            {
+              "downsample": 64.0,
+              "width": 320,
+              "height": 662
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21999999999999997,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21999999999999997,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 3,
+      "randomizedName": "318db515-e853-404e-a908-01133b103494",
+      "imageName": "26143_Bnip3_DAB_1of2.czi - Scene #3",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/Additional%20scans%20Aug%202024/26143_Bnip3_DAB_1of2.czi",
+        "args": [
+          "--series",
+          "3"
+        ],
+        "metadata": {
+          "name": "26143_Bnip3_DAB_1of2.czi - Scene #4",
+          "width": 26158,
+          "height": 48886,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 26158,
+              "height": 48886
+            },
+            {
+              "downsample": 2.0,
+              "width": 13079,
+              "height": 24443
+            },
+            {
+              "downsample": 4.0,
+              "width": 6539,
+              "height": 12221
+            },
+            {
+              "downsample": 8.0,
+              "width": 3269,
+              "height": 6110
+            },
+            {
+              "downsample": 16.0,
+              "width": 1634,
+              "height": 3055
+            },
+            {
+              "downsample": 32.0,
+              "width": 817,
+              "height": 1527
+            },
+            {
+              "downsample": 64.0,
+              "width": 408,
+              "height": 763
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21999999999999997,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21999999999999997,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 4,
+      "randomizedName": "cdfe7ad3-f3ec-460a-ab5d-e9deb129d0d4",
+      "imageName": "26143_Bnip3_DAB_1of2.czi - Scene #4",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/Additional%20scans%20Aug%202024/26143_Bnip3_DAB_1of2.czi",
+        "args": [
+          "--series",
+          "4"
+        ],
+        "metadata": {
+          "name": "26143_Bnip3_DAB_1of2.czi - Scene #5",
+          "width": 47822,
+          "height": 66475,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 47822,
+              "height": 66475
+            },
+            {
+              "downsample": 2.0,
+              "width": 23911,
+              "height": 33237
+            },
+            {
+              "downsample": 4.0,
+              "width": 11955,
+              "height": 16618
+            },
+            {
+              "downsample": 8.0,
+              "width": 5977,
+              "height": 8309
+            },
+            {
+              "downsample": 16.0,
+              "width": 2988,
+              "height": 4154
+            },
+            {
+              "downsample": 32.0,
+              "width": 1494,
+              "height": 2077
+            },
+            {
+              "downsample": 64.0,
+              "width": 747,
+              "height": 1038
+            },
+            {
+              "downsample": 128.0,
+              "width": 373,
+              "height": 519
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21999999999999997,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21999999999999997,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 5,
+      "randomizedName": "7bcf984d-2140-462d-a481-347f35d46616",
+      "imageName": "26143_Bnip3_DAB_1of2.czi - Scene #5",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/Additional%20scans%20Aug%202024/26143_Bnip3_DAB_2of2.czi",
+        "args": [
+          "--series",
+          "0"
+        ],
+        "metadata": {
+          "name": "26143_Bnip3_DAB_2of2.czi - Scene #1",
+          "width": 26104,
+          "height": 42414,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 26104,
+              "height": 42414
+            },
+            {
+              "downsample": 2.0,
+              "width": 13052,
+              "height": 21207
+            },
+            {
+              "downsample": 4.0,
+              "width": 6526,
+              "height": 10603
+            },
+            {
+              "downsample": 8.0,
+              "width": 3263,
+              "height": 5301
+            },
+            {
+              "downsample": 16.0,
+              "width": 1631,
+              "height": 2650
+            },
+            {
+              "downsample": 32.0,
+              "width": 815,
+              "height": 1325
+            },
+            {
+              "downsample": 64.0,
+              "width": 407,
+              "height": 662
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21999999999999997,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21999999999999997,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 6,
+      "randomizedName": "9cd5befd-9634-45ec-8731-0ef2340caf5e",
+      "imageName": "26143_Bnip3_DAB_2of2.czi - Scene #1",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/Additional%20scans%20Aug%202024/26143_Bnip3_DAB_2of2.czi",
+        "args": [
+          "--series",
+          "1"
+        ],
+        "metadata": {
+          "name": "26143_Bnip3_DAB_2of2.czi - Scene #2",
+          "width": 24732,
+          "height": 49955,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 24732,
+              "height": 49955
+            },
+            {
+              "downsample": 2.0,
+              "width": 12366,
+              "height": 24977
+            },
+            {
+              "downsample": 4.0,
+              "width": 6183,
+              "height": 12488
+            },
+            {
+              "downsample": 8.0,
+              "width": 3091,
+              "height": 6244
+            },
+            {
+              "downsample": 16.0,
+              "width": 1545,
+              "height": 3122
+            },
+            {
+              "downsample": 32.0,
+              "width": 772,
+              "height": 1561
+            },
+            {
+              "downsample": 64.0,
+              "width": 386,
+              "height": 780
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21999999999999997,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21999999999999997,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 7,
+      "randomizedName": "e792176c-68f8-4413-8b0a-ed26c8c7bb28",
+      "imageName": "26143_Bnip3_DAB_2of2.czi - Scene #2",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/Additional%20scans%20Aug%202024/26143_Bnip3_DAB_2of2.czi",
+        "args": [
+          "--series",
+          "2"
+        ],
+        "metadata": {
+          "name": "26143_Bnip3_DAB_2of2.czi - Scene #3",
+          "width": 27558,
+          "height": 44850,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 27558,
+              "height": 44850
+            },
+            {
+              "downsample": 2.0,
+              "width": 13779,
+              "height": 22425
+            },
+            {
+              "downsample": 4.0,
+              "width": 6889,
+              "height": 11212
+            },
+            {
+              "downsample": 8.0,
+              "width": 3444,
+              "height": 5606
+            },
+            {
+              "downsample": 16.0,
+              "width": 1722,
+              "height": 2803
+            },
+            {
+              "downsample": 32.0,
+              "width": 861,
+              "height": 1401
+            },
+            {
+              "downsample": 64.0,
+              "width": 430,
+              "height": 700
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21999999999999997,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21999999999999997,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 8,
+      "randomizedName": "1271eb34-d041-4b73-ae8f-b1b58754a653",
+      "imageName": "26143_Bnip3_DAB_2of2.czi - Scene #3",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/Additional%20scans%20Aug%202024/26143_slide%202%20section%203%20rescanned.czi",
+        "args": [
+          "--series",
+          "0"
+        ],
+        "metadata": {
+          "name": "26143_slide 2 section 3 rescanned.czi",
+          "width": 27564,
+          "height": 44646,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 27564,
+              "height": 44646
+            },
+            {
+              "downsample": 2.0,
+              "width": 13782,
+              "height": 22323
+            },
+            {
+              "downsample": 4.0,
+              "width": 6891,
+              "height": 11161
+            },
+            {
+              "downsample": 8.0,
+              "width": 3445,
+              "height": 5580
+            },
+            {
+              "downsample": 16.0,
+              "width": 1722,
+              "height": 2790
+            },
+            {
+              "downsample": 32.0,
+              "width": 861,
+              "height": 1395
+            },
+            {
+              "downsample": 64.0,
+              "width": 430,
+              "height": 697
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21999999999999997,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21999999999999997,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 9,
+      "randomizedName": "f8f3d385-c39a-499a-b881-2afce663aacf",
+      "imageName": "26143_slide 2 section 3 rescanned.czi",
+      "metadata": {}
+    }
+  ]
+}

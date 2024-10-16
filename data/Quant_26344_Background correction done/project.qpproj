@@ -1,0 +1,2194 @@
+{
+  "version": "0.5.0",
+  "createTimestamp": 1717686469068,
+  "modifyTimestamp": 1717686469068,
+  "uri": "file:////forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Papers%20and%20manuscripts/2024_5_Bnip3%20expression%20in%20AD%20rats/Quant_26344/project.qpproj",
+  "lastID": 23,
+  "images": [
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_7.czi",
+        "args": [
+          "--series",
+          "0"
+        ],
+        "metadata": {
+          "name": "26344_7.czi - Scene #01",
+          "width": 50499,
+          "height": 42173,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 50499,
+              "height": 42173
+            },
+            {
+              "downsample": 2.0,
+              "width": 25249,
+              "height": 21086
+            },
+            {
+              "downsample": 4.0,
+              "width": 12624,
+              "height": 10543
+            },
+            {
+              "downsample": 8.0,
+              "width": 6312,
+              "height": 5271
+            },
+            {
+              "downsample": 16.0,
+              "width": 3156,
+              "height": 2635
+            },
+            {
+              "downsample": 32.0,
+              "width": 1578,
+              "height": 1317
+            },
+            {
+              "downsample": 64.0,
+              "width": 789,
+              "height": 658
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 1,
+      "randomizedName": "e5dee64d-f5dc-4a17-b46c-33af27a56319",
+      "imageName": "26344_7.czi - Scene #01",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_7.czi",
+        "args": [
+          "--series",
+          "1"
+        ],
+        "metadata": {
+          "name": "26344_7.czi - Scene #02",
+          "width": 34703,
+          "height": 47553,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 34703,
+              "height": 47553
+            },
+            {
+              "downsample": 2.0,
+              "width": 17351,
+              "height": 23776
+            },
+            {
+              "downsample": 4.0,
+              "width": 8675,
+              "height": 11888
+            },
+            {
+              "downsample": 8.0,
+              "width": 4337,
+              "height": 5944
+            },
+            {
+              "downsample": 16.0,
+              "width": 2168,
+              "height": 2972
+            },
+            {
+              "downsample": 32.0,
+              "width": 1084,
+              "height": 1486
+            },
+            {
+              "downsample": 64.0,
+              "width": 542,
+              "height": 743
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 2,
+      "randomizedName": "d1308eb6-1671-4ea1-96e5-fb52c9abb198",
+      "imageName": "26344_7.czi - Scene #02",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_7.czi",
+        "args": [
+          "--series",
+          "2"
+        ],
+        "metadata": {
+          "name": "26344_7.czi - Scene #03",
+          "width": 33256,
+          "height": 37849,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 33256,
+              "height": 37849
+            },
+            {
+              "downsample": 2.0,
+              "width": 16628,
+              "height": 18924
+            },
+            {
+              "downsample": 4.0,
+              "width": 8314,
+              "height": 9462
+            },
+            {
+              "downsample": 8.0,
+              "width": 4157,
+              "height": 4731
+            },
+            {
+              "downsample": 16.0,
+              "width": 2078,
+              "height": 2365
+            },
+            {
+              "downsample": 32.0,
+              "width": 1039,
+              "height": 1182
+            },
+            {
+              "downsample": 64.0,
+              "width": 519,
+              "height": 591
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 3,
+      "randomizedName": "9a58e87c-d25b-4e09-8268-6ea949f12b81",
+      "imageName": "26344_7.czi - Scene #03",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_7.czi",
+        "args": [
+          "--series",
+          "3"
+        ],
+        "metadata": {
+          "name": "26344_7.czi - Scene #04",
+          "width": 51957,
+          "height": 41117,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 51957,
+              "height": 41117
+            },
+            {
+              "downsample": 2.0,
+              "width": 25978,
+              "height": 20558
+            },
+            {
+              "downsample": 4.0,
+              "width": 12989,
+              "height": 10279
+            },
+            {
+              "downsample": 8.0,
+              "width": 6494,
+              "height": 5139
+            },
+            {
+              "downsample": 16.0,
+              "width": 3247,
+              "height": 2569
+            },
+            {
+              "downsample": 32.0,
+              "width": 1623,
+              "height": 1284
+            },
+            {
+              "downsample": 64.0,
+              "width": 811,
+              "height": 642
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 4,
+      "randomizedName": "95a33b06-e5b1-469d-b42e-dd1203ff0f5c",
+      "imageName": "26344_7.czi - Scene #04",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_7.czi",
+        "args": [
+          "--series",
+          "4"
+        ],
+        "metadata": {
+          "name": "26344_7.czi - Scene #05",
+          "width": 33273,
+          "height": 38929,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 33273,
+              "height": 38929
+            },
+            {
+              "downsample": 2.0,
+              "width": 16636,
+              "height": 19464
+            },
+            {
+              "downsample": 4.0,
+              "width": 8318,
+              "height": 9732
+            },
+            {
+              "downsample": 8.0,
+              "width": 4159,
+              "height": 4866
+            },
+            {
+              "downsample": 16.0,
+              "width": 2079,
+              "height": 2433
+            },
+            {
+              "downsample": 32.0,
+              "width": 1039,
+              "height": 1216
+            },
+            {
+              "downsample": 64.0,
+              "width": 519,
+              "height": 608
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 5,
+      "randomizedName": "5e383ab2-6ca1-45de-933b-e0862569637e",
+      "imageName": "26344_7.czi - Scene #05",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_7.czi",
+        "args": [
+          "--series",
+          "5"
+        ],
+        "metadata": {
+          "name": "26344_7.czi - Scene #06",
+          "width": 37583,
+          "height": 42163,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 37583,
+              "height": 42163
+            },
+            {
+              "downsample": 2.0,
+              "width": 18791,
+              "height": 21081
+            },
+            {
+              "downsample": 4.0,
+              "width": 9395,
+              "height": 10540
+            },
+            {
+              "downsample": 8.0,
+              "width": 4697,
+              "height": 5270
+            },
+            {
+              "downsample": 16.0,
+              "width": 2348,
+              "height": 2635
+            },
+            {
+              "downsample": 32.0,
+              "width": 1174,
+              "height": 1317
+            },
+            {
+              "downsample": 64.0,
+              "width": 587,
+              "height": 658
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 6,
+      "randomizedName": "4edc6979-d1cd-4829-8aec-a95e47ce833b",
+      "imageName": "26344_7.czi - Scene #06",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_7.czi",
+        "args": [
+          "--series",
+          "6"
+        ],
+        "metadata": {
+          "name": "26344_7.czi - Scene #07",
+          "width": 27520,
+          "height": 46468,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 27520,
+              "height": 46468
+            },
+            {
+              "downsample": 2.0,
+              "width": 13760,
+              "height": 23234
+            },
+            {
+              "downsample": 4.0,
+              "width": 6880,
+              "height": 11617
+            },
+            {
+              "downsample": 8.0,
+              "width": 3440,
+              "height": 5808
+            },
+            {
+              "downsample": 16.0,
+              "width": 1720,
+              "height": 2904
+            },
+            {
+              "downsample": 32.0,
+              "width": 860,
+              "height": 1452
+            },
+            {
+              "downsample": 64.0,
+              "width": 430,
+              "height": 726
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 7,
+      "randomizedName": "954b3617-27e0-43ce-a2b9-fc9c2d6cf4d3",
+      "imageName": "26344_7.czi - Scene #07",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_7.czi",
+        "args": [
+          "--series",
+          "7"
+        ],
+        "metadata": {
+          "name": "26344_7.czi - Scene #08",
+          "width": 31853,
+          "height": 42160,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 31853,
+              "height": 42160
+            },
+            {
+              "downsample": 2.0,
+              "width": 15926,
+              "height": 21080
+            },
+            {
+              "downsample": 4.0,
+              "width": 7963,
+              "height": 10540
+            },
+            {
+              "downsample": 8.0,
+              "width": 3981,
+              "height": 5270
+            },
+            {
+              "downsample": 16.0,
+              "width": 1990,
+              "height": 2635
+            },
+            {
+              "downsample": 32.0,
+              "width": 995,
+              "height": 1317
+            },
+            {
+              "downsample": 64.0,
+              "width": 497,
+              "height": 658
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 8,
+      "randomizedName": "cc02857a-26b1-4ab0-bcbf-d8baaa298aed",
+      "imageName": "26344_7.czi - Scene #08",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_7.czi",
+        "args": [
+          "--series",
+          "8"
+        ],
+        "metadata": {
+          "name": "26344_7.czi - Scene #09",
+          "width": 53425,
+          "height": 40004,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 53425,
+              "height": 40004
+            },
+            {
+              "downsample": 2.0,
+              "width": 26712,
+              "height": 20002
+            },
+            {
+              "downsample": 4.0,
+              "width": 13356,
+              "height": 10001
+            },
+            {
+              "downsample": 8.0,
+              "width": 6678,
+              "height": 5000
+            },
+            {
+              "downsample": 16.0,
+              "width": 3339,
+              "height": 2500
+            },
+            {
+              "downsample": 32.0,
+              "width": 1669,
+              "height": 1250
+            },
+            {
+              "downsample": 64.0,
+              "width": 834,
+              "height": 625
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 9,
+      "randomizedName": "fc8642d9-37a9-4eb9-bbd6-22a73092220b",
+      "imageName": "26344_7.czi - Scene #09",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_7.czi",
+        "args": [
+          "--series",
+          "9"
+        ],
+        "metadata": {
+          "name": "26344_7.czi - Scene #10",
+          "width": 24637,
+          "height": 40012,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 24637,
+              "height": 40012
+            },
+            {
+              "downsample": 2.0,
+              "width": 12318,
+              "height": 20006
+            },
+            {
+              "downsample": 4.0,
+              "width": 6159,
+              "height": 10003
+            },
+            {
+              "downsample": 8.0,
+              "width": 3079,
+              "height": 5001
+            },
+            {
+              "downsample": 16.0,
+              "width": 1539,
+              "height": 2500
+            },
+            {
+              "downsample": 32.0,
+              "width": 769,
+              "height": 1250
+            },
+            {
+              "downsample": 64.0,
+              "width": 384,
+              "height": 625
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 10,
+      "randomizedName": "e3a8ddf2-0a5d-4105-a2d1-bd6f4f05a108",
+      "imageName": "26344_7.czi - Scene #10",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_8.czi",
+        "args": [
+          "--series",
+          "0"
+        ],
+        "metadata": {
+          "name": "26344_8.czi - Scene #01",
+          "width": 23196,
+          "height": 36764,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 23196,
+              "height": 36764
+            },
+            {
+              "downsample": 2.0,
+              "width": 11598,
+              "height": 18382
+            },
+            {
+              "downsample": 4.0,
+              "width": 5799,
+              "height": 9191
+            },
+            {
+              "downsample": 8.0,
+              "width": 2899,
+              "height": 4595
+            },
+            {
+              "downsample": 16.0,
+              "width": 1449,
+              "height": 2297
+            },
+            {
+              "downsample": 32.0,
+              "width": 724,
+              "height": 1148
+            },
+            {
+              "downsample": 64.0,
+              "width": 362,
+              "height": 574
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 11,
+      "randomizedName": "55c81a4c-51a1-479f-ada7-51729acca7ec",
+      "imageName": "26344_8.czi - Scene #01",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_8.czi",
+        "args": [
+          "--series",
+          "1"
+        ],
+        "metadata": {
+          "name": "26344_8.czi - Scene #02",
+          "width": 21772,
+          "height": 36763,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 21772,
+              "height": 36763
+            },
+            {
+              "downsample": 2.0,
+              "width": 10886,
+              "height": 18381
+            },
+            {
+              "downsample": 4.0,
+              "width": 5443,
+              "height": 9190
+            },
+            {
+              "downsample": 8.0,
+              "width": 2721,
+              "height": 4595
+            },
+            {
+              "downsample": 16.0,
+              "width": 1360,
+              "height": 2297
+            },
+            {
+              "downsample": 32.0,
+              "width": 680,
+              "height": 1148
+            },
+            {
+              "downsample": 64.0,
+              "width": 340,
+              "height": 574
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 12,
+      "randomizedName": "fc9dd01e-10e5-44a9-838b-064ceec9314a",
+      "imageName": "26344_8.czi - Scene #02",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_8.czi",
+        "args": [
+          "--series",
+          "2"
+        ],
+        "metadata": {
+          "name": "26344_8.czi - Scene #03",
+          "width": 44749,
+          "height": 28141,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 44749,
+              "height": 28141
+            },
+            {
+              "downsample": 2.0,
+              "width": 22374,
+              "height": 14070
+            },
+            {
+              "downsample": 4.0,
+              "width": 11187,
+              "height": 7035
+            },
+            {
+              "downsample": 8.0,
+              "width": 5593,
+              "height": 3517
+            },
+            {
+              "downsample": 16.0,
+              "width": 2796,
+              "height": 1758
+            },
+            {
+              "downsample": 32.0,
+              "width": 1398,
+              "height": 879
+            },
+            {
+              "downsample": 64.0,
+              "width": 699,
+              "height": 439
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 13,
+      "randomizedName": "45d0aa52-4e72-4ec3-ae90-fa6d81efdf2c",
+      "imageName": "26344_8.czi - Scene #03",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_8.czi",
+        "args": [
+          "--series",
+          "3"
+        ],
+        "metadata": {
+          "name": "26344_8.czi - Scene #04",
+          "width": 20312,
+          "height": 34602,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 20312,
+              "height": 34602
+            },
+            {
+              "downsample": 2.0,
+              "width": 10156,
+              "height": 17301
+            },
+            {
+              "downsample": 4.0,
+              "width": 5078,
+              "height": 8650
+            },
+            {
+              "downsample": 8.0,
+              "width": 2539,
+              "height": 4325
+            },
+            {
+              "downsample": 16.0,
+              "width": 1269,
+              "height": 2162
+            },
+            {
+              "downsample": 32.0,
+              "width": 634,
+              "height": 1081
+            },
+            {
+              "downsample": 64.0,
+              "width": 317,
+              "height": 540
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 14,
+      "randomizedName": "d1bbf10a-c740-4e44-aa37-efe6da195714",
+      "imageName": "26344_8.czi - Scene #04",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_8.czi",
+        "args": [
+          "--series",
+          "4"
+        ],
+        "metadata": {
+          "name": "26344_8.czi - Scene #05",
+          "width": 18880,
+          "height": 35686,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 18880,
+              "height": 35686
+            },
+            {
+              "downsample": 2.0,
+              "width": 9440,
+              "height": 17843
+            },
+            {
+              "downsample": 4.0,
+              "width": 4720,
+              "height": 8921
+            },
+            {
+              "downsample": 8.0,
+              "width": 2360,
+              "height": 4460
+            },
+            {
+              "downsample": 16.0,
+              "width": 1180,
+              "height": 2230
+            },
+            {
+              "downsample": 32.0,
+              "width": 590,
+              "height": 1115
+            },
+            {
+              "downsample": 64.0,
+              "width": 295,
+              "height": 557
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 15,
+      "randomizedName": "694092a7-4cf7-4afb-9648-2828ca111f28",
+      "imageName": "26344_8.czi - Scene #05",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_8.czi",
+        "args": [
+          "--series",
+          "5"
+        ],
+        "metadata": {
+          "name": "26344_8.czi - Scene #06",
+          "width": 14587,
+          "height": 38928,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 14587,
+              "height": 38928
+            },
+            {
+              "downsample": 2.0,
+              "width": 7293,
+              "height": 19464
+            },
+            {
+              "downsample": 4.0,
+              "width": 3646,
+              "height": 9732
+            },
+            {
+              "downsample": 8.0,
+              "width": 1823,
+              "height": 4866
+            },
+            {
+              "downsample": 16.0,
+              "width": 911,
+              "height": 2433
+            },
+            {
+              "downsample": 32.0,
+              "width": 455,
+              "height": 1216
+            },
+            {
+              "downsample": 64.0,
+              "width": 227,
+              "height": 608
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 16,
+      "randomizedName": "28e6ef00-2b2b-4916-8f2e-ddd920261235",
+      "imageName": "26344_8.czi - Scene #06",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_8.czi",
+        "args": [
+          "--series",
+          "6"
+        ],
+        "metadata": {
+          "name": "26344_8.czi - Scene #07",
+          "width": 37555,
+          "height": 32456,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 37555,
+              "height": 32456
+            },
+            {
+              "downsample": 2.0,
+              "width": 18777,
+              "height": 16228
+            },
+            {
+              "downsample": 4.0,
+              "width": 9388,
+              "height": 8114
+            },
+            {
+              "downsample": 8.0,
+              "width": 4694,
+              "height": 4057
+            },
+            {
+              "downsample": 16.0,
+              "width": 2347,
+              "height": 2028
+            },
+            {
+              "downsample": 32.0,
+              "width": 1173,
+              "height": 1014
+            },
+            {
+              "downsample": 64.0,
+              "width": 586,
+              "height": 507
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 17,
+      "randomizedName": "af9acbf8-98fc-4b15-b075-d9bc4822c5f5",
+      "imageName": "26344_8.czi - Scene #07",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_8.czi",
+        "args": [
+          "--series",
+          "7"
+        ],
+        "metadata": {
+          "name": "26344_8.czi - Scene #08",
+          "width": 44757,
+          "height": 28158,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 44757,
+              "height": 28158
+            },
+            {
+              "downsample": 2.0,
+              "width": 22378,
+              "height": 14079
+            },
+            {
+              "downsample": 4.0,
+              "width": 11189,
+              "height": 7039
+            },
+            {
+              "downsample": 8.0,
+              "width": 5594,
+              "height": 3519
+            },
+            {
+              "downsample": 16.0,
+              "width": 2797,
+              "height": 1759
+            },
+            {
+              "downsample": 32.0,
+              "width": 1398,
+              "height": 879
+            },
+            {
+              "downsample": 64.0,
+              "width": 699,
+              "height": 439
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 18,
+      "randomizedName": "db32e75e-a1ef-4106-a2c7-ecbc3d2ca37f",
+      "imageName": "26344_8.czi - Scene #08",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_8.czi",
+        "args": [
+          "--series",
+          "8"
+        ],
+        "metadata": {
+          "name": "26344_8.czi - Scene #09",
+          "width": 36125,
+          "height": 37857,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 36125,
+              "height": 37857
+            },
+            {
+              "downsample": 2.0,
+              "width": 18062,
+              "height": 18928
+            },
+            {
+              "downsample": 4.0,
+              "width": 9031,
+              "height": 9464
+            },
+            {
+              "downsample": 8.0,
+              "width": 4515,
+              "height": 4732
+            },
+            {
+              "downsample": 16.0,
+              "width": 2257,
+              "height": 2366
+            },
+            {
+              "downsample": 32.0,
+              "width": 1128,
+              "height": 1183
+            },
+            {
+              "downsample": 64.0,
+              "width": 564,
+              "height": 591
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 19,
+      "randomizedName": "c2edbec0-434a-4bb1-bd1a-77ac8491c809",
+      "imageName": "26344_8.czi - Scene #09",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_8.czi",
+        "args": [
+          "--series",
+          "9"
+        ],
+        "metadata": {
+          "name": "26344_8.czi - Scene #10",
+          "width": 34669,
+          "height": 36780,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 34669,
+              "height": 36780
+            },
+            {
+              "downsample": 2.0,
+              "width": 17334,
+              "height": 18390
+            },
+            {
+              "downsample": 4.0,
+              "width": 8667,
+              "height": 9195
+            },
+            {
+              "downsample": 8.0,
+              "width": 4333,
+              "height": 4597
+            },
+            {
+              "downsample": 16.0,
+              "width": 2166,
+              "height": 2298
+            },
+            {
+              "downsample": 32.0,
+              "width": 1083,
+              "height": 1149
+            },
+            {
+              "downsample": 64.0,
+              "width": 541,
+              "height": 574
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 20,
+      "randomizedName": "fcef3663-0681-4047-bb2a-b488f1388d75",
+      "imageName": "26344_8.czi - Scene #10",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_8.czi",
+        "args": [
+          "--series",
+          "10"
+        ],
+        "metadata": {
+          "name": "26344_8.czi - Scene #11",
+          "width": 44772,
+          "height": 27062,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 44772,
+              "height": 27062
+            },
+            {
+              "downsample": 2.0,
+              "width": 22386,
+              "height": 13531
+            },
+            {
+              "downsample": 4.0,
+              "width": 11193,
+              "height": 6765
+            },
+            {
+              "downsample": 8.0,
+              "width": 5596,
+              "height": 3382
+            },
+            {
+              "downsample": 16.0,
+              "width": 2798,
+              "height": 1691
+            },
+            {
+              "downsample": 32.0,
+              "width": 1399,
+              "height": 845
+            },
+            {
+              "downsample": 64.0,
+              "width": 699,
+              "height": 422
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 21,
+      "randomizedName": "b67f8a13-a085-476c-8e76-2ce2d5dede0b",
+      "imageName": "26344_8.czi - Scene #11",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_8.czi",
+        "args": [
+          "--series",
+          "11"
+        ],
+        "metadata": {
+          "name": "26344_8.czi - Scene #12",
+          "width": 43310,
+          "height": 27084,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 43310,
+              "height": 27084
+            },
+            {
+              "downsample": 2.0,
+              "width": 21655,
+              "height": 13542
+            },
+            {
+              "downsample": 4.0,
+              "width": 10827,
+              "height": 6771
+            },
+            {
+              "downsample": 8.0,
+              "width": 5413,
+              "height": 3385
+            },
+            {
+              "downsample": 16.0,
+              "width": 2706,
+              "height": 1692
+            },
+            {
+              "downsample": 32.0,
+              "width": 1353,
+              "height": 846
+            },
+            {
+              "downsample": 64.0,
+              "width": 676,
+              "height": 423
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 22,
+      "randomizedName": "201d556f-f18a-4f16-a83d-e7ceff0bdb54",
+      "imageName": "26344_8.czi - Scene #12",
+      "metadata": {}
+    },
+    {
+      "serverBuilder": {
+        "builderType": "uri",
+        "providerClassName": "qupath.lib.images.servers.bioformats.BioFormatsServerBuilder",
+        "uri": "file://forskning.it.ntnu.no/ntnu/mh-kin/moser/kobro/Students/Raissa%20Lejneva/12%20months/26344(-)/26344_8.czi",
+        "args": [
+          "--series",
+          "12"
+        ],
+        "metadata": {
+          "name": "26344_8.czi - Scene #13",
+          "width": 26083,
+          "height": 36765,
+          "sizeZ": 1,
+          "sizeT": 1,
+          "channelType": "DEFAULT",
+          "isRGB": true,
+          "pixelType": "UINT8",
+          "levels": [
+            {
+              "downsample": 1.0,
+              "width": 26083,
+              "height": 36765
+            },
+            {
+              "downsample": 2.0,
+              "width": 13041,
+              "height": 18382
+            },
+            {
+              "downsample": 4.0,
+              "width": 6520,
+              "height": 9191
+            },
+            {
+              "downsample": 8.0,
+              "width": 3260,
+              "height": 4595
+            },
+            {
+              "downsample": 16.0,
+              "width": 1630,
+              "height": 2297
+            },
+            {
+              "downsample": 32.0,
+              "width": 815,
+              "height": 1148
+            },
+            {
+              "downsample": 64.0,
+              "width": 407,
+              "height": 574
+            }
+          ],
+          "channels": [
+            {
+              "name": "Red",
+              "color": -65536
+            },
+            {
+              "name": "Green",
+              "color": -16711936
+            },
+            {
+              "name": "Blue",
+              "color": -16776961
+            }
+          ],
+          "pixelCalibration": {
+            "pixelWidth": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "pixelHeight": {
+              "value": 0.21971294503730876,
+              "unit": "µm"
+            },
+            "zSpacing": {
+              "value": 1.0,
+              "unit": "z-slice"
+            },
+            "timeUnit": "SECONDS",
+            "timepoints": []
+          },
+          "magnification": 20.0,
+          "preferredTileWidth": 1024,
+          "preferredTileHeight": 1024
+        }
+      },
+      "entryID": 23,
+      "randomizedName": "e559b83d-621a-4754-a25d-54a949707ae2",
+      "imageName": "26344_8.czi - Scene #13",
+      "metadata": {}
+    }
+  ]
+}
