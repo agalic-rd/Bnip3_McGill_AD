@@ -25,7 +25,7 @@ packages:
   - car
   - forecast
   - lme4/lme4
-  - glmmTMB@1.1.5
+  - glmmTMB
   
   ## ===[ Model Analysis ]=== ##
   - broom

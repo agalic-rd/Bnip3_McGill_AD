@@ -41,7 +41,7 @@ corr_matrix_plot <- function(dat, vars, title = "") {
 
 ## Generating a boxplot for an individual gene, showing the main effect of a predictor (using the model fitted to this gene's data as input)
 make_signif_boxplot <- function(
-    mod, xaxis = "condition", facet = NULL, cluster = "mouse", add_cluster_averages = TRUE, subtitle = NULL, caption = NULL, 
+    mod, xaxis = "condition", facet = NULL, cluster = "rat", add_cluster_averages = TRUE, subtitle = NULL, caption = NULL, 
     invert_DCq = TRUE, scale = "link", adjust = "none", method = "pairwise", resp_name = NULL, ncol = 2
 ) {
   
@@ -137,7 +137,7 @@ make_signif_boxplot <- function(
       aes(group = .data[[cluster]], fill = .data[[xaxis]]), geom = "point", fun = mean, 
       size = ifelse(is.null(facet), 4, 3), shape = 23, color = color_text, alpha = 0.9, position = position_dodge(0.2)
     )}
-    #+ ggrepel::geom_text_repel(aes(label = mouse), color = "black")
+    #+ ggrepel::geom_text_repel(aes(label = rat), color = "black")
     + geom_errorbarh(
       data = p_data_contrasts, aes(xmin = x1, xmax = x2, y = pos.y), inherit.aes = FALSE, 
       color = "black", height = 0.03 * amp, linewidth = 0.5
@@ -171,7 +171,7 @@ make_signif_boxplot <- function(
 
 ## Generating a boxplot for an individual gene, showing interaction effects between two predictors (using the model fitted to this gene's data as input)
 make_signif_boxplot_inter <- function(
-    mod, pred1 = "condition", pred2, facet = NULL, cluster = NULL, add_cluster_averages = FALSE, invert_DCq = TRUE, stage = NULL,
+    mod, pred1 = "condition", pred2, facet = NULL, cluster = NULL, add_cluster_averages = FALSE, stage = NULL,
     scale = "link", adjust = "none", resp_name = NULL, ncol = 2
 ) {
   
@@ -183,13 +183,8 @@ make_signif_boxplot_inter <- function(
   dat <- insight::get_data(mod)
   resp <- insight::find_response(mod)
   
-  is_DCq <- resp %in% c("DCq", "DCt", "dct", "dcq")
-  
-  if (is_DCq && invert_DCq) dat <- dat |> mutate({{ resp }} := -1 * .data[[resp]]) # -1 * DCq for better legibility
-  
   if (is.null(resp_name)) {
-    if (is_DCq) resp_name <- ifelse(invert_DCq, str_glue("-1 * {resp}"), str_glue("{resp}"))
-    else resp_name <- get_response_name(resp)
+    resp_name <- get_response_name(resp)
   }
   
   ## Making sure the variables of interest are factors for emmeans
@@ -209,17 +204,14 @@ make_signif_boxplot_inter <- function(
   
   specs <- paste0(" ~ ", pred1)
   if (!is.null(pred2)) specs <- paste0(specs, " | ", pred2)
-  # specs <- case_when(
-  #   is.null(pred2) && !is.null(facet) ~ paste0(specs, " | ", facet),
-  #   !is.null(pred2) && is.null(facet) ~ paste0(specs, " | ", pred2),
-  #   !is.null(pred2) && !is.null(facet) ~ paste0(specs, " | ", pred2, " * ", facet),
-  #   .default = specs
-  # )
   specs <- as.formula(specs)
   
   emmeans <- emmeans::emmeans(
-    mod, specs = specs, type = "response", 
-    by = facet, data = mutate(insight::get_data(mod), across(any_of(c(facet)), as.character))
+    mod, 
+    specs = specs, 
+    type = "response", 
+    by = facet, 
+    data = mutate(insight::get_data(mod), across(any_of(c(facet)), as.factor))
   )
   if (tolower(scale) %in% c("response", "resp")) emmeans <- regrid(emmeans, transform = "response")
   
@@ -382,47 +374,7 @@ make_fold_timeline_plot <- function(
   return(timeline)
 }
 
-#----------------#
-####🔺Heatmap ####
-#----------------#
 
-make_heatmap <- function(data, xaxis, facet) {
-  
-  max_upreg <- data |> filter(fold >= 1) |> pull(fold) |> max()
-  
-  return(
-    ggplot(data, aes(x = .data[[xaxis]], y = gene))
-    + scale_fill_gradient(
-      name = regulation_type$UPREG, 
-      low = "seagreen2", high = "seagreen4", limits = c(1, max_upreg), 
-      trans = scales::log10_trans(), labels = \(x) round(x, 2)
-    )
-    + geom_tile(data = \(d) filter(d, fold >= 1), aes(fill = fold), colour = "white")
-    + new_scale("fill")
-    + scale_fill_gradient(
-      name = regulation_type$DOWNREG, 
-      low = "firebrick4", high = "firebrick2", limits = c(0, 1), 
-      labels = \(x) round(x, 2)
-    )
-    + geom_tile(data = \(d) filter(d, fold < 1), aes(fill = fold), colour = "white")
-    + geom_text(
-      aes(label = paste(round(fold, 2), stars.pval(p_value), sep = " ")), size = 3, colour = "white", fontface = "bold", 
-      check_overlap = TRUE
-    )
-    + facet_grid(cols = vars(.data[[facet]]), scales = "free_x", space = "free_x")
-    + theme_light_mar
-    + theme(
-      legend.title = element_markdown(face = "bold", vjust = 0.80),
-      legend.position = "bottom",
-      legend.text = element_text(size = 11),
-      strip.text = element_text(face = "bold"),
-      axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1),
-      axis.text.y = element_text(hjust = 0),
-      axis.ticks = element_line(linewidth = 0.4)
-    )
-    + labs(x = xaxis, y = "")
-  )
-}
 
 #--------------------------#
 ####🔺Model diagnostics ####

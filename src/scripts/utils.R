@@ -43,12 +43,14 @@ label_pval <- function(p) {
 }
 
 get_response_name <- function(var, col = "Label") {
+  if (!file.exists(configs$data$data_dict)) return(var)
   res <- read_xlsx(configs$data$data_dict, sheet = 1) |> filter(Name == var) |> pull(col)
   
   return(res %ne% var)
 }
 
 get_var_level_name <- function(var, level, col = "Description") {
+  if (!file.exists(configs$data$data_dict)) return(level)
   res <- read_excel(configs$data$data_dict, sheet = var) |> filter(Name == level) |> pull(col)
   
   return(res %ne% level)
