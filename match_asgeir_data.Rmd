@@ -1,0 +1,113 @@
+```{r}
+source(here::here("src", "setup.R"), echo = FALSE)
+```
+
+# Raw data
+
+```{r}
+xlsx_file <- list.files(here::here("data"), pattern = "Quant_.*", full.names = TRUE) |> 
+    list.files(pattern = ".*\\.xlsx", full.names = TRUE) |> 
+    purrr::discard(\(x) stringr::str_detect(basename(x), "^\\~\\$")) |> 
+    rlang::set_names(\(x) stringr::str_extract(basename(x), "^[^\\s_]+"))
+
+raw_data <- purrr::map_dfr(
+    xlsx_file, 
+    function(file) {
+        sheets <- readxl::excel_sheets(file)
+        purrr::map_dfr(
+            purrr::set_names(sheets), 
+            function(sheet) {
+                readxl::read_excel(file, sheet = sheet) |> 
+                    janitor::clean_names() |> 
+                    filter(!is.na(object_id)) |> 
+                    rename_with(.fn = \(x) stringr::str_replace_all(x, "subtracted", "corrected"), .cols = everything()) |> 
+                    select(object_id, cell_dab_od_mean, background, od_corrected = cell_dab_od_mean_background_corrected) |> 
+                    mutate(
+                        group_row_id = row_number(),
+                        cell_dab_od_mean = as.numeric(cell_dab_od_mean),
+                        od_corrected = as.numeric(od_corrected),
+                        od_corrected = ifelse(is.na(od_corrected), cell_dab_od_mean - background, od_corrected),
+                        od_corrected = ifelse(od_corrected < 0, 0, od_corrected)
+                    )
+            },
+            .id = "layer"
+        ) |> mutate(section = consecutive_id(background))
+    },
+    .id = "rat"
+) |> mutate(layer = case_when(
+    stringr::str_starts(layer, "DLE_") ~ "LEC",
+    stringr::str_starts(layer, "ME_") ~ "MEC",
+    .default = NA_character_
+)) |> arrange(rat, layer, section)
+```
+
+# Animal ref data
+
+Used to match rats with the animal_id in Asgeir's data
+
+```{r}
+animal_ref <- readxl::read_excel(here::here("data", "animal_ref.xlsx"), col_names = c("temp")) |> 
+    mutate(id = consecutive_id(temp)) |> 
+    tidyr::separate_wider_delim(col = temp, delim = "_", names = c("animal_id", "rat")) |> 
+    mutate(animal_id = as.numeric(animal_id))
+
+animal_ref |> print(n = 24)
+```
+
+# Asgeir's data
+
+```{r}
+asgeir_data <- bind_rows(
+    readxl::read_excel(here::here("data", "LEC Nested Data ALL.xlsx"), na = "NaN", col_types = "numeric") |> 
+        mutate(layer = "LEC", id = consecutive_id(Animal_ID), asgeir_row_id = row_number()) |> 
+        janitor::clean_names() |> 
+        pivot_longer(cols = -c(id, animal_id, layer, asgeir_row_id), names_pattern = "(wt|ad)(\\d{1,2})m", names_to = c("condition", "age"), values_drop_na = TRUE) |> 
+        left_join(animal_ref, join_by(id, animal_id)) |> 
+        select(asgeir_row_id, rat, layer, condition, age, cell_dab_od_mean_background_corrected_new = value) |> 
+        mutate(group_row_id = row_number(), .by = c(layer, rat), .after = asgeir_row_id), 
+    readxl::read_excel(here::here("data", "MEC Nested Data ALL.xlsx"), na = "NaN", col_types = "numeric") |> 
+        mutate(layer = "MEC", id = consecutive_id(Animal_ID), asgeir_row_id = row_number()) |> 
+        janitor::clean_names() |> 
+        pivot_longer(cols = -c(id, animal_id, layer, asgeir_row_id), names_pattern = "(wt|ad)(\\d{1,2})m", names_to = c("condition", "age"), values_drop_na = TRUE) |> 
+        left_join(animal_ref, join_by(id, animal_id)) |> 
+        select(asgeir_row_id, rat, layer, condition, age, cell_dab_od_mean_background_corrected_new = value) |> 
+        mutate(group_row_id = row_number(), .by = c(layer, rat), .after = asgeir_row_id)
+) |> 
+    rename(od_corrected_new = cell_dab_od_mean_background_corrected_new) |> 
+    mutate(od_corrected_new = ifelse(od_corrected_new < 0, 0, od_corrected_new))
+
+asgeir_data
+```
+
+# Matching
+
+    TODO: Cap difference in row_id by the difference in row_number between the two groups of layer * rat
+
+```{r}
+matched_data <- asgeir_data |>
+    mutate(od_corrected_new = as.character(od_corrected_new)) |> 
+    left_join(
+        raw_data |> select(-object_id) |> mutate(od_corrected = as.character(od_corrected)), 
+        join_by(rat, layer, od_corrected_new == od_corrected, closest(y$group_row_id >= x$group_row_id))
+    )
+
+matched_data
+```
+
+## Writing the output
+
+Final output:
+
+```{r}
+openxlsx2::write_xlsx(matched_data, here::here("data", "matched_data.xlsx"))
+```
+
+Mismatches:
+
+```{r}
+matched_data_mismatches <- matched_data |> filter(is.na(group_row_id.y) | abs(group_row_id.x - group_row_id.y) > 55)
+
+matched_data_mismatches
+
+openxlsx2::write_xlsx(matched_data_mismatches, here::here("data", "__matched_data_mismatches.xlsx"))
+```
