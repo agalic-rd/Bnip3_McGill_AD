@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.4.0",
+    "Version": "4.4.1",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -11,7 +11,7 @@
   "Packages": {
     "DHARMa": {
       "Package": "DHARMa",
-      "Version": "0.4.6",
+      "Version": "0.4.7",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -28,7 +28,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "ffebef4763cbacec396d5f841b391739"
+      "Hash": "1ce015f138dd74b3695fc60a86fcce98"
     },
     "Deriv": {
       "Package": "Deriv",
@@ -278,7 +278,7 @@
     },
     "bayestestR": {
       "Package": "bayestestR",
-      "Version": "0.14.0",
+      "Version": "0.15.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -290,7 +290,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "71e7da5d38487173de67a1f0d763ceef"
+      "Hash": "d7c05ccb9d60d87dbbe8b4042c385f01"
     },
     "boot": {
       "Package": "boot",
@@ -391,6 +391,18 @@
         "R"
       ],
       "Hash": "ac6cdb8552c61bd36b0e54d07cf2aab7"
+    },
+    "cellranger": {
+      "Package": "cellranger",
+      "Version": "1.1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "rematch",
+        "tibble"
+      ],
+      "Hash": "f61dbaec772ccd2e17705c1e872e9e7c"
     },
     "checkmate": {
       "Package": "checkmate",
@@ -537,7 +549,7 @@
     },
     "datawizard": {
       "Package": "datawizard",
-      "Version": "0.12.3",
+      "Version": "0.13.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -546,7 +558,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "611537168bbb78b57720de109ec1ad19"
+      "Hash": "303aeace6f3554ce2d62e5d1df6fcd6e"
     },
     "digest": {
       "Package": "digest",
@@ -656,7 +668,7 @@
     },
     "emmeans": {
       "Package": "emmeans",
-      "Version": "1.10.4",
+      "Version": "1.10.5",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -669,7 +681,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "68cb418754ae04b2bcb4377dda09ce2b"
+      "Hash": "5c42da2936ccaa3802b4893a65553dc4"
     },
     "estimability": {
       "Package": "estimability",
@@ -1486,7 +1498,7 @@
     },
     "parameters": {
       "Package": "parameters",
-      "Version": "0.22.2",
+      "Version": "0.23.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1499,7 +1511,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "ee0115da94a9cf7c451615415ce65c03"
+      "Hash": "518970426f8042a2b27c3415da881674"
     },
     "patchwork": {
       "Package": "patchwork",
@@ -1540,7 +1552,7 @@
     },
     "performance": {
       "Package": "performance",
-      "Version": "0.12.3",
+      "Version": "0.12.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1551,7 +1563,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "92be9503bc3394c464688fb6b03002e3"
+      "Hash": "64e61921ea6b2a4d76c81290d5ecce25"
     },
     "pillar": {
       "Package": "pillar",
@@ -1654,6 +1666,30 @@
         "vctrs"
       ],
       "Hash": "fc1213566f2ed9f0b15bef656ed1000b"
+    },
+    "prettyunits": {
+      "Package": "prettyunits",
+      "Version": "1.2.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "6b01fc98b1e86c4f705ce9dcfd2f57c7"
+    },
+    "progress": {
+      "Package": "progress",
+      "Version": "1.2.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "R6",
+        "crayon",
+        "hms",
+        "prettyunits"
+      ],
+      "Hash": "f4625e061cb2865f111b47ff163a5ca6"
     },
     "promises": {
       "Package": "promises",
@@ -1768,6 +1804,21 @@
       ],
       "Hash": "8c06968e0a5b0209c5f34239b1302336"
     },
+    "readxl": {
+      "Package": "readxl",
+      "Version": "1.4.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "cellranger",
+        "cpp11",
+        "progress",
+        "tibble",
+        "utils"
+      ],
+      "Hash": "8cf9c239b96df1bbb133b74aef77ad0a"
+    },
     "reformulas": {
       "Package": "reformulas",
       "Version": "0.3.0",
@@ -1781,15 +1832,22 @@
       ],
       "Hash": "74da0864ad11d63a15d1a325c1d8ec8c"
     },
+    "rematch": {
+      "Package": "rematch",
+      "Version": "2.0.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "cbff1b666c6fa6d21202f07e2318d4f1"
+    },
     "renv": {
       "Package": "renv",
-      "Version": "1.0.10",
+      "Version": "1.0.11",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "utils"
       ],
-      "Hash": "d0387d5687ec933dd7587efd4cfa2d85"
+      "Hash": "47623f66b4e80b3b0587bc5d7b309888"
     },
     "reshape2": {
       "Package": "reshape2",
