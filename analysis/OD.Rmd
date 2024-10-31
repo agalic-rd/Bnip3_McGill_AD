@@ -8,8 +8,18 @@ source(here::here("src", "setup.R"), echo = FALSE)
 ***
 
 ```{r}
-(optical_density <- load_od_data())
+(optical_density <- load_od_data_corrected())
+(optical_density_old <- load_od_data())
 ```
+
+<!----------------------------------------------------------------------------->
+<!----------------------------------------------------------------------------->
+# II. Analysis:
+***
+
+<!----------------------------------------------------------------------------->
+## 1. Separately:
+***
 
 **Temporary**
 
@@ -30,12 +40,12 @@ res <- optical_density |>
     make_signif_boxplot(make_mod_od(d), xaxis = "condition", subtitle = paste0(g$age, " + ", g$location))
   })
 
-res
+res |> wrap_plots()
 ```
 
 
 <!----------------------------------------------------------------------------->
-## 1. Volume
+## 2. Combined:
 ***
 
 <!----------------------------------------------------------------------------->
@@ -72,24 +82,24 @@ make_acf_plot(mod_od_gamma_tot)
 #### Predictive checks
 
 ```{r}
-mod_vol_gamma_tot_dharma <- DHARMa::simulateResiduals(mod_vol_gamma_tot, plot = FALSE, n = 300, seed = getOption("seed"))
-mod_vol_gamma_tot_dharma_t <- t(mod_vol_gamma_tot_dharma$simulatedResponse)
+mod_od_gamma_tot_dharma <- DHARMa::simulateResiduals(mod_od_gamma_tot, plot = FALSE, n = 300, seed = getOption("seed"))
+mod_od_gamma_tot_dharma_t <- t(mod_od_gamma_tot_dharma$simulatedResponse)
 ```
 
 ```{r fig.width = 10}
-ppc_plots(mod_vol_gamma_tot, simulations = mod_vol_gamma_tot_dharma_t, term = "condition")
-ppc_plots(mod_vol_gamma_tot, simulations = mod_vol_gamma_tot_dharma_t, term = "stage")
+ppc_plots(mod_od_gamma_tot, simulations = mod_od_gamma_tot_dharma_t, term = "condition")
+ppc_plots(mod_od_gamma_tot, simulations = mod_od_gamma_tot_dharma_t, term = "age")
 ```
 
 ```{r fig.width = 10}
-ppc_stat_plots(mod_vol_gamma_tot, simulations = mod_vol_gamma_tot_dharma_t, term = "condition")
-ppc_stat_plots(mod_vol_gamma_tot, simulations = mod_vol_gamma_tot_dharma_t, term = "stage")
+ppc_stat_plots(mod_od_gamma_tot, simulations = mod_od_gamma_tot_dharma_t, term = "condition")
+ppc_stat_plots(mod_od_gamma_tot, simulations = mod_od_gamma_tot_dharma_t, term = "age")
 ```
 
 #### Potential outliers
 
 ```{r}
-get_model_based_outliers(clearing_total, mod_vol_gamma_tot, mod_vol_gamma_tot_dharma, clearing_responses)
+get_model_based_outliers(optical_density, mod_od_gamma_tot, mod_od_gamma_tot_dharma, optical_density$od_corrected)
 ```
 
 <!----------------------------------------------------------------------------->
@@ -123,7 +133,7 @@ distribution_summary(get_data(mod_od_gamma_tot), dvs = find_response(mod_od_gamm
 
 cli_h1("[Emmeans]")
 
-emmeans(mod_od_gamma_tot, specs = "condition", type = "response")
+emmeans(mod_od_gamma_tot, specs = "condition", regrid = "response")
 ```
 
 **Age**
@@ -135,7 +145,7 @@ distribution_summary(get_data(mod_od_gamma_tot), dvs = find_response(mod_od_gamm
 
 cli_h1("[Emmeans]")
 
-emmeans(mod_od_gamma_tot, specs = "age", type = "response")
+emmeans(mod_od_gamma_tot, specs = "age", regrid = "response")
 ```
 
 **Condition:Age**
@@ -147,7 +157,7 @@ distribution_summary(get_data(mod_od_gamma_tot), dvs = find_response(mod_od_gamm
 
 cli_h1("[Emmeans]")
 
-emmeans(mod_od_gamma_tot, specs = ~ condition | age, type = "response")
+emmeans(mod_od_gamma_tot, specs = ~ condition | age, regrid = "response")
 ```
 
 #### Contrasts
@@ -213,14 +223,14 @@ emmeans(mod_od_gamma_tot, specs = ~ condition | age, regrid = "response") |>
 ```
 
 ```{r fig.width = 14, fig.height = 6}
-make_signif_boxplot(mod_od_gamma_tot, xaxis = "condition", facet = "age", ncol = 4) |> 
+make_signif_boxplot(mod_od_gamma_tot, xaxis = "condition", facet = "age", ncol = 4, max_points = Inf) |> 
   save_png("mod_od_gamma_tot", width = 14, height = 6, display = TRUE)
 ```
 
 ```{r fig.height = 6, fig.width = 14}
 make_signif_boxplot_inter(
   mod_od_gamma_tot, pred1 = "condition", pred2 = "location", facet = "age", 
-  cluster = "rat", add_cluster_averages = TRUE, ncol = 5
+  cluster = "rat", add_cluster_averages = TRUE, ncol = 5, max_points = Inf
 ) |> 
   save_png("mod_od_gamma_inter", width = 14, height = 6)
 ```
@@ -233,7 +243,8 @@ emmeans(mod_od_gamma_tot, specs = ~ age | location * condition, type = "response
 ```{r fig.height = 6, fig.width = 14}
 make_signif_boxplot_inter(
   mod_od_gamma_tot, pred1 = "age", pred2 = "location", facet = "condition", 
-  cluster = "rat", add_cluster_averages = TRUE, ncol = 5
-)
+  cluster = "rat", add_cluster_averages = TRUE, ncol = 5, max_points = Inf
+) |> 
+  save_png("mod_od_gamma_inter_age", width = 14, height = 6)
 ```
 

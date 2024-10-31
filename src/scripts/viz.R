@@ -42,7 +42,7 @@ corr_matrix_plot <- function(dat, vars, title = "") {
 ## Generating a boxplot for an individual gene, showing the main effect of a predictor (using the model fitted to this gene's data as input)
 make_signif_boxplot <- function(
     mod, xaxis = "condition", facet = NULL, cluster = "rat", add_cluster_averages = TRUE, subtitle = NULL, caption = NULL, 
-    invert_DCq = TRUE, scale = "link", adjust = "none", method = "pairwise", resp_name = NULL, ncol = 2
+    scale = "link", adjust = "none", method = "pairwise", resp_name = NULL, max_points = 50, ncol = 2
 ) {
   
   get_n_units <- function(df) {
@@ -67,12 +67,6 @@ make_signif_boxplot <- function(
   
   resp <- insight::find_response(mod)
   if (is.null(resp_name)) resp_name <- get_response_name(resp)
-  
-  is_DCq <- resp %in% c("DCq", "DCt", "dct", "dcq")
-  if (is_DCq && invert_DCq) {
-    dat <- dat |> mutate(DCq = -1 * DCq)
-    resp_name <- "-1 * DCq"
-  }
   
   ## Making sure the variables of interest are contrasts for emmeans
   dat <- dat |> mutate(across(c(any_of(c(xaxis, facet)) & where(\(c) !is.factor(c))), as.factor))
@@ -125,11 +119,11 @@ make_signif_boxplot <- function(
     + geom_boxplot(outlier.alpha = 0, size = 1.1, fill = NA)
     + stat_summary(fun = mean, geom = "errorbar", aes(ymax = after_stat(y), ymin = after_stat(y)), width = 0.75, linewidth = 1.1, linetype = "dotted")
     + { if (!is.null(cluster)) geom_jitter(
-      data = \(x) x |> group_by(across(any_of(c(xaxis, facet)))) |> group_modify(\(d, g) slice_sample(d, n = min(nrow(d), 50))) |> ungroup(), 
+      data = \(x) x |> group_by(across(any_of(c(xaxis, facet)))) |> group_modify(\(d, g) slice_sample(d, n = min(nrow(d), max_points))) |> ungroup(), 
       size = 1.5, width = 0.1, alpha = 0.3
     )
       else geom_jitter(
-        data = \(x) x |> group_by(across(any_of(c(xaxis, facet)))) |> group_modify(\(d, g) slice_sample(d, n = min(nrow(d), 50))) |> ungroup(), 
+        data = \(x) x |> group_by(across(any_of(c(xaxis, facet)))) |> group_modify(\(d, g) slice_sample(d, n = min(nrow(d), max_points))) |> ungroup(), 
         mapping = aes(fill = .data[[xaxis]]), shape = 23, color = color_text, size = 3, width = 0.1, alpha = 0.9
       )
     }
@@ -172,7 +166,7 @@ make_signif_boxplot <- function(
 ## Generating a boxplot for an individual gene, showing interaction effects between two predictors (using the model fitted to this gene's data as input)
 make_signif_boxplot_inter <- function(
     mod, pred1 = "condition", pred2, facet = NULL, cluster = NULL, add_cluster_averages = FALSE, stage = NULL,
-    scale = "link", adjust = "none", resp_name = NULL, ncol = 2
+    scale = "link", adjust = "none", resp_name = NULL, max_points = 50, ncol = 2
 ) {
   
   get_n_units <- function(df) {
@@ -265,11 +259,11 @@ make_signif_boxplot_inter <- function(
     + stat_summary(fun = mean, geom = "errorbar", aes(ymax = after_stat(y), ymin = after_stat(y)), width = 0.75, size = 1.1, linetype = "dotted")
     + { 
       if (!is.null(cluster)) geom_jitter(
-        data = \(x) x |> group_by(across(any_of(c(pred1, pred2)))) |> group_modify(\(d, g) slice_sample(d, n = min(nrow(d), 50))) |> ungroup(), 
+        data = \(x) x |> group_by(across(any_of(c(pred1, pred2)))) |> group_modify(\(d, g) slice_sample(d, n = min(nrow(d), max_points))) |> ungroup(), 
         size = 1.5, width = 0.1, alpha = 0.3
       )
       else geom_jitter(
-        data = \(x) x |> group_by(across(any_of(c(pred1, pred2)))) |> group_modify(\(d, g) slice_sample(d, n = min(nrow(d), 50))) |> ungroup(), 
+        data = \(x) x |> group_by(across(any_of(c(pred1, pred2)))) |> group_modify(\(d, g) slice_sample(d, n = min(nrow(d), max_points))) |> ungroup(), 
         mapping = aes(fill = .data[[pred1]]), shape = 23, color = color_text, size = 3, width = 0.1, alpha = 0.9
       )
     }

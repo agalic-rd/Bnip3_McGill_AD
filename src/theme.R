@@ -23,7 +23,7 @@ color_text_bi <- "#a8aeb4"
 
 colors_cond <- c("#e07c2f", "#189649")   # Condition: AD, WT
 
-my_palettes_d <- list(colors_cond, scales::viridis_pal()(3), scales::viridis_pal()(5), scales::viridis_pal()(10), scales::viridis_pal()(15))
+my_palettes_d <- list(colors_cond, MetBrewer::met.brewer("Klimt", n = 3), MetBrewer::met.brewer("Klimt", n = 5), MetBrewer::met.brewer("Klimt", n = 10))
 
 #----------------------#
 ####🔺ggplot themes ####
