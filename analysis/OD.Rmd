@@ -8,8 +8,7 @@ source(here::here("src", "setup.R"), echo = FALSE)
 ***
 
 ```{r}
-(optical_density <- load_od_data_corrected())
-(optical_density_old <- load_od_data())
+(optical_density <- load_od_data())
 ```
 
 <!----------------------------------------------------------------------------->
@@ -236,8 +235,8 @@ make_signif_boxplot_inter(
 ```
 
 ```{r fig.height = 6, fig.width = 14}
-emmeans(mod_od_gamma_tot, specs = ~ age | location * condition, type = "response") |> 
-  contrast(method = "pairwise", adjust = "none", infer = TRUE)
+# emmeans(mod_od_gamma_tot, specs = ~ age | location * condition, type = "response") |> 
+#   contrast(method = "pairwise", adjust = "none", infer = TRUE)
 ```
 
 ```{r fig.height = 6, fig.width = 14}

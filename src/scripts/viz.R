@@ -298,7 +298,7 @@ make_signif_boxplot_inter <- function(
       legend.position = "none",
       plot.subtitle = ggtext::element_markdown(hjust = 0.5, face = "plain")
     )
-    + labs(y = resp_name, x = str_c(pred1, " by ", pred2))
+    + labs(y = resp_name, x = str_c(stringr::str_to_title(pred1), " by ", stringr::str_to_title(pred2)))
     + {if(!is.null(stage)) labs(subtitle = str_glue("{stage}"))}
     + {if (!is.null(facet)) facet_wrap( ~ .data[[facet]], ncol = ncol)}
     + {if (add_cluster_averages) labs(caption = str_glue("Small round points are individual measurements\n Diamonds represent {cluster}-averages"))}

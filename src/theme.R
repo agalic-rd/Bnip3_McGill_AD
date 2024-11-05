@@ -21,9 +21,9 @@ strip_color <- "#adb5bd"
 color_text <- "black"
 color_text_bi <- "#a8aeb4"
 
-colors_cond <- c("#e07c2f", "#189649")   # Condition: AD, WT
+colors_cond <- head(ggpubfigs::friendly_pal("zesty_four"), 2)   # Condition: AD, WT
 
-my_palettes_d <- list(colors_cond, MetBrewer::met.brewer("Klimt", n = 3), MetBrewer::met.brewer("Klimt", n = 5), MetBrewer::met.brewer("Klimt", n = 10))
+my_palettes_d <- list(colors_cond, ggpubfigs::friendly_pal("bright_seven"))
 
 #----------------------#
 ####🔺ggplot themes ####

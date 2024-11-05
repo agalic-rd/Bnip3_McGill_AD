@@ -48,7 +48,7 @@ packages:
   - ggdist
   - bayesplot
   - ggnewscale
-  - MetBrewer
+  - JLSteenwyk/ggpubfigs
   
   ## ===[ Reporting ]=== ##
   - knitr
