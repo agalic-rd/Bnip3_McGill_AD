@@ -142,7 +142,7 @@ make_signif_boxplot <- function(
     )
     + geom_label(
       aes(y = min - 0.05 * amp, fontface = "bold", label = N, color = .data[[xaxis]]),
-      data = extra_dat, fill = NA, size = 5, alpha = 0.7
+      data = extra_dat, fill = NA, size = 6, alpha = 0.7
     )
     # + scale_y_continuous(labels = function(x) format(x, scientific = TRUE))
     + theme(
@@ -151,7 +151,9 @@ make_signif_boxplot <- function(
       panel.grid.minor = element_blank(), 
       axis.title.x = element_blank(),
       plot.subtitle = ggtext::element_markdown(hjust = 0.5, face = "plain"),
-      plot.caption = element_text(hjust = 0.5, face = "plain", size = 9)
+      plot.caption = element_text(hjust = 0.5, face = "plain", size = 13),
+      axis.text.x = ggplot2::element_text(size = 15),
+      axis.text.y = ggplot2::element_text(size = 15)
     )
     + labs(y = resp_name)
     + {if(!is.null(subtitle)) labs(subtitle = subtitle)}
@@ -283,7 +285,7 @@ make_signif_boxplot_inter <- function(
     )
     + geom_label(
       aes(y = min - 0.05 * amp, fontface = "bold", label = N, color = .data[[pred1]]), 
-      data = extra_dat, fill = NA, size = 5, alpha = 0.7
+      data = extra_dat, fill = NA, size = 6, alpha = 0.7
     )
     ## Interactions
     + geom_errorbarh(
@@ -296,7 +298,10 @@ make_signif_boxplot_inter <- function(
     )
     + theme(
       legend.position = "none",
-      plot.subtitle = ggtext::element_markdown(hjust = 0.5, face = "plain")
+      plot.subtitle = ggtext::element_markdown(hjust = 0.5, face = "plain"),
+      axis.text.x = ggplot2::element_text(size = 15),
+      axis.text.y = ggplot2::element_text(size = 15),
+      plot.caption = ggplot2::element_text(size = 13)
     )
     + labs(y = resp_name, x = str_c(stringr::str_to_title(pred1), " by ", stringr::str_to_title(pred2)))
     + {if(!is.null(stage)) labs(subtitle = str_glue("{stage}"))}
