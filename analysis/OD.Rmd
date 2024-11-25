@@ -152,7 +152,9 @@ emmeans(mod_od_gamma_tot, specs = "age", regrid = "response")
 ```{r}
 cli_h1("[Observed]")
 
-distribution_summary(get_data(mod_od_gamma_tot), dvs = find_response(mod_od_gamma_tot), between = c("condition", "age"))
+distribution_summary(get_data(mod_od_gamma_tot), dvs = find_response(mod_od_gamma_tot), between = c("condition", "age")) |>
+  as.data.frame() |> 
+  write_xlsx(here::here("data", "stats.xlsx"))
 
 cli_h1("[Emmeans]")
 
@@ -223,7 +225,7 @@ emmeans(mod_od_gamma_tot, specs = ~ condition | age, regrid = "response") |>
 
 ```{r fig.width = 14, fig.height = 6}
 make_signif_boxplot(mod_od_gamma_tot, xaxis = "condition", facet = "age", ncol = 4, max_points = Inf) |> 
-  save_png("mod_od_gamma_tot", width = 14, height = 6, display = TRUE)
+  save_png("mod_od_gamma_tot", width = 14, height = 7, display = TRUE)
 ```
 
 ```{r fig.height = 6, fig.width = 14}
@@ -231,7 +233,7 @@ make_signif_boxplot_inter(
   mod_od_gamma_tot, pred1 = "condition", pred2 = "location", facet = "age", 
   cluster = "rat", add_cluster_averages = TRUE, ncol = 5, max_points = Inf
 ) |> 
-  save_png("mod_od_gamma_inter", width = 14, height = 6)
+  save_png("mod_od_gamma_inter", width = 14, height = 7)
 ```
 
 ```{r fig.height = 6, fig.width = 14}
@@ -244,6 +246,6 @@ make_signif_boxplot_inter(
   mod_od_gamma_tot, pred1 = "age", pred2 = "location", facet = "condition", 
   cluster = "rat", add_cluster_averages = TRUE, ncol = 5, max_points = Inf
 ) |> 
-  save_png("mod_od_gamma_inter_age", width = 14, height = 6)
+  save_png("mod_od_gamma_inter_age", width = 14, height = 7)
 ```
 

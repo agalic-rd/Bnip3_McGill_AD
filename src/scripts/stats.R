@@ -13,16 +13,16 @@ distribution_summary <- function(data, dvs, between = "Condition") {
     pivot_longer(all_of(dvs), names_to = "DV", values_to = "Value") |> 
     group_by(across(any_of(between)))  |> 
     group_map(
-      \(d, g) datawizard::describe_distribution(group_by(d, DV), verbose = FALSE) |>
+      \(d, g) datawizard::describe_distribution(group_by(d, DV), centrality = "all", verbose = FALSE) |>
         mutate(
           Variance = SD^2,
           CoV = ifelse(SD / Mean > 1e4, NA_real_, SD / Mean),
           Variable = str_remove(.group, fixed("DV="))
         ) |> 
         add_column(g, .after = 1) |> 
-        select("Variable", all_of(between), "Mean", "SD", "Variance", "CoV", "IQR", "Min", "Max", "Skewness", "Kurtosis", "n")
+        select("Variable", all_of(between), "Mean", "Median", "SD", "Variance", "CoV", "IQR", "Min", "Max", "Skewness", "Kurtosis", "n")
     ) |> 
-    reduce(full_join, by = c("Variable", between, "Mean", "SD", "Variance", "CoV", "IQR", "Min", "Max", "Skewness", "Kurtosis", "n")) |> 
+    reduce(full_join, by = c("Variable", between, "Mean", "Median", "SD", "Variance", "CoV", "IQR", "Min", "Max", "Skewness", "Kurtosis", "n")) |> 
     arrange(Variable, across(any_of(between)))
 }
 
