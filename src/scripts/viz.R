@@ -42,7 +42,7 @@ corr_matrix_plot <- function(dat, vars, title = "") {
 ## Generating a boxplot for an individual gene, showing the main effect of a predictor (using the model fitted to this gene's data as input)
 make_signif_boxplot <- function(
     mod, xaxis = "condition", facet = NULL, cluster = "rat", add_cluster_averages = TRUE, subtitle = NULL, caption = NULL, 
-    scale = "link", adjust = "none", method = "pairwise", resp_name = NULL, max_points = 50, ncol = 2
+    scale = "link", adjust = "none", method = "pairwise", resp_name = NULL, max_points = 50, ncol = 2, print_eqs = TRUE
 ) {
   
   get_n_units <- function(df) {
@@ -109,7 +109,6 @@ make_signif_boxplot <- function(
       pos.y = max + step * 0.1 * (max - min)
     ) 
     |> ungroup()
-    |> filter(p.signif <= .05)
   )
   
   # -----------[ Plot ]----------- #
@@ -161,6 +160,24 @@ make_signif_boxplot <- function(
     + {if (!is.null(facet)) facet_wrap( ~ .data[[facet]], ncol = ncol)}
     + {if (add_cluster_averages) labs(caption = str_glue("Small round points are individual measurements\n Diamonds represent {cluster}-averages"))}
   )
+
+    # -----------[ Formatted results ]----------- #
+  
+  if (print_eqs) {
+    # print(contrasts)
+    contrasts_eqs <- contrasts |> rowwise() |> mutate(
+      contrast_name = pick(everything()) |> colnames() |> str_subset("^estimate|risk|odds|^ratio|^difference"),
+      crit_val_name = pick(everything()) |> colnames() |> str_subset("^(z|t|F)"),
+      Equation = glue::glue(
+        "$<<str_extract({{crit_val_name}}, '^(z|t)')>>(<<df>>) = <<round(.data[[crit_val_name]], 3)>>; " %s+%
+          "p = <<scales::pvalue(p.value)>>; " %s+%
+          "<<str_to_sentence({{contrast_name}})>> = <<round(.data[[contrast_name]], 3)>>; " %s+%
+          "CI_{95} = [<<round(asymp.LCL, 3)>>, <<round(asymp.UCL, 3)>>];$",
+        .open = "<<", .close = ">>"
+      )) |> select(Contrast, any_of(facet), Equation)
+    
+    print(contrasts_eqs)
+  }
   
   return(plot)
 }
@@ -168,7 +185,7 @@ make_signif_boxplot <- function(
 ## Generating a boxplot for an individual gene, showing interaction effects between two predictors (using the model fitted to this gene's data as input)
 make_signif_boxplot_inter <- function(
     mod, pred1 = "condition", pred2, facet = NULL, cluster = NULL, add_cluster_averages = FALSE, stage = NULL,
-    scale = "link", adjust = "none", resp_name = NULL, max_points = 50, ncol = 2
+    scale = "link", adjust = "none", resp_name = NULL, max_points = 50, ncol = 2, print_eqs = TRUE
 ) {
   
   get_n_units <- function(df) {
@@ -309,6 +326,36 @@ make_signif_boxplot_inter <- function(
     + {if (add_cluster_averages) labs(caption = str_glue("Small round points are individual measurements\n Diamonds represent {cluster}-averages"))}
     + scale_x_discrete(labels = \(l) str_replace(l, "_", "\n"))
   )
+
+    # -----------[ Formatted results ]----------- #
+  
+  if (print_eqs) {
+    contrasts_eqs <- contrasts |> rowwise() |> mutate(
+      contrast_name = pick(everything()) |> colnames() |> str_subset("^estimate|risk|odds|^ratio|^difference"),
+      crit_val_name = pick(everything()) |> colnames() |> str_subset("^(z|t)"),
+      Equation = glue::glue(
+        "$<<str_extract({{crit_val_name}}, '^(z|t)')>>(<<df>>) = <<round(.data[[crit_val_name]], 3)>>; " %s+%
+          "p = <<scales::pvalue(p.value)>>; " %s+%
+          "<<str_to_sentence({{contrast_name}})>> = <<round(.data[[contrast_name]], 3)>>; " %s+%
+          "CI_{95} = [<<round(asymp.LCL, 3)>>, <<round(asymp.UCL, 3)>>];$",
+        .open = "<<", .close = ">>"
+      )) |> select(Contrast, any_of(pred2), Equation)
+    
+    print(contrasts_eqs)
+    
+    contrasts_interactions_eqs <- contrasts_interactions |> rowwise() |> mutate(
+      contrast_name = pick(everything()) |> colnames() |> str_subset("^estimate|risk|odds|^ratio|^difference"),
+      crit_val_name = pick(everything()) |> colnames() |> str_subset("^(z|t)"),
+      Equation = glue::glue(
+        "$<<str_extract({{crit_val_name}}, '^(z|t)')>>(<<df>>) = <<round(.data[[crit_val_name]], 3)>>; " %s+%
+          "p = <<scales::pvalue(p.value)>>; " %s+%
+          "<<str_to_sentence({{contrast_name}})>> = <<round(.data[[contrast_name]], 3)>>; " %s+%
+          "CI_{95} = [<<round(asymp.LCL, 3)>>, <<round(asymp.UCL, 3)>>];$",
+        .open = "<<", .close = ">>"
+      )) |> select(matches("_pairwise"), Equation)
+    
+    print(contrasts_interactions_eqs)
+  }
   
   return(plot)
 }
