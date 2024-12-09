@@ -13,7 +13,7 @@ source(here::here("src", "setup.R"), echo = FALSE)
 
 <!----------------------------------------------------------------------------->
 <!----------------------------------------------------------------------------->
-# II. Analysis:
+# II. Soma:
 ***
 
 <!----------------------------------------------------------------------------->
@@ -33,7 +33,7 @@ make_mod_od <- function(data) {
   )
 }
 
-res <- optical_density |>
+res <- optical_density$soma |>
   group_by(age, location) |> 
   group_map(function(d, g) {
     make_signif_boxplot(make_mod_od(d), xaxis = "condition", subtitle = paste0(g$age, " + ", g$location))
@@ -57,7 +57,7 @@ mod_od_gamma_tot <- glmmTMB(
   od_corrected ~ condition * age * location + (1 | rat / section),
   # dispformula = ~ age * location,
   family = Gamma("log"),
-  data = optical_density,
+  data = optical_density$soma,
   REML = TRUE
 )
 
@@ -98,7 +98,7 @@ ppc_stat_plots(mod_od_gamma_tot, simulations = mod_od_gamma_tot_dharma_t, term =
 #### Potential outliers
 
 ```{r}
-get_model_based_outliers(optical_density, mod_od_gamma_tot, mod_od_gamma_tot_dharma, optical_density$od_corrected)
+get_model_based_outliers(optical_density$soma, mod_od_gamma_tot, mod_od_gamma_tot_dharma, c("od_corrected"))
 ```
 
 <!----------------------------------------------------------------------------->
@@ -249,3 +249,201 @@ make_signif_boxplot_inter(
   save_png("mod_od_gamma_inter_age", width = 14, height = 7)
 ```
 
+
+<!----------------------------------------------------------------------------->
+<!----------------------------------------------------------------------------->
+# III. Molecular Layer:
+***
+
+<!----------------------------------------------------------------------------->
+## 2. Combined:
+***
+
+<!----------------------------------------------------------------------------->
+### Models
+
+**Gamma**
+
+```{r}
+mod_bnip3_gamma <- glmmTMB(
+  bnip3_level ~ condition * age + (1 | rat),
+  # dispformula = ~ age * location,
+  family = Gamma("log"),
+  data = optical_density$ml,
+  REML = TRUE
+)
+
+cli_h1("[Parameters]")
+parameters(mod_bnip3_gamma)
+cli_h1("[Fitness]")
+performance(mod_bnip3_gamma)
+```
+
+<!----------------------------------------------------------------------------->
+### Model Diagnostics
+
+#### Residual diagnostics
+
+```{r fig.width = 10}
+check_model(mod_bnip3_gamma)
+
+make_acf_plot(mod_bnip3_gamma)
+```
+
+#### Predictive checks
+
+```{r}
+mod_bnip3_gamma_dharma <- DHARMa::simulateResiduals(mod_bnip3_gamma, plot = FALSE, n = 300, seed = getOption("seed"))
+mod_bnip3_gamma_dharma_t <- t(mod_bnip3_gamma_dharma$simulatedResponse)
+```
+
+```{r fig.width = 10}
+ppc_plots(mod_bnip3_gamma, simulations = mod_bnip3_gamma_dharma_t, term = "condition")
+ppc_plots(mod_bnip3_gamma, simulations = mod_bnip3_gamma_dharma_t, term = "age")
+```
+
+```{r fig.width = 10}
+ppc_stat_plots(mod_bnip3_gamma, simulations = mod_bnip3_gamma_dharma_t, term = "condition")
+ppc_stat_plots(mod_bnip3_gamma, simulations = mod_bnip3_gamma_dharma_t, term = "age")
+```
+
+#### Potential outliers
+
+```{r}
+get_model_based_outliers(optical_density$ml, mod_bnip3_gamma, mod_bnip3_gamma_dharma, c("bnip3_level"))
+```
+
+<!----------------------------------------------------------------------------->
+### Model Analysis
+
+#### Model parameters
+
+**All effects (Wald):**
+
+```{r}
+parameters(
+  mod_bnip3_gamma, exponentiate = should_exp(mod_bnip3_gamma),
+  ci_method = "Wald", p_adjust = "none", summary = TRUE, digits = 3
+)
+```
+
+**Main effects (Wald):**
+
+```{r}
+car::Anova(mod_bnip3_gamma, type = 3)
+```
+
+#### Marginal means
+
+**Condition**
+
+```{r}
+cli_h1("[Observed]")
+
+distribution_summary(get_data(mod_bnip3_gamma), dvs = find_response(mod_bnip3_gamma), between = "condition")
+
+cli_h1("[Emmeans]")
+
+emmeans(mod_bnip3_gamma, specs = "condition", regrid = "response")
+```
+
+**Age**
+
+```{r}
+cli_h1("[Observed]")
+
+distribution_summary(get_data(mod_bnip3_gamma), dvs = find_response(mod_bnip3_gamma), between = "age")
+
+cli_h1("[Emmeans]")
+
+emmeans(mod_bnip3_gamma, specs = "age", regrid = "response")
+```
+
+**Condition:Age**
+
+```{r}
+cli_h1("[Observed]")
+
+distribution_summary(get_data(mod_bnip3_gamma), dvs = find_response(mod_bnip3_gamma), between = c("condition", "age")) |>
+  as.data.frame() |> 
+  write_xlsx(here::here("data", "stats.xlsx"))
+
+cli_h1("[Emmeans]")
+
+emmeans(mod_bnip3_gamma, specs = ~ condition | age, regrid = "response")
+```
+
+#### Contrasts
+
+**Condition**
+
+```{r}
+cli_h1("[Link scale]")
+
+emmeans(mod_bnip3_gamma, specs = "condition", type = "response") |> 
+  contrast(method = "pairwise", adjust = "none", infer = TRUE)
+
+cli_h1("[Response scale]")
+
+emmeans(mod_bnip3_gamma, specs = "condition", regrid = "response") |>
+  contrast(method = "pairwise", adjust = "none", infer = TRUE)
+```
+
+```{r fig.width = 4, fig.height = 7}
+make_signif_boxplot(mod_bnip3_gamma, xaxis = "condition")
+```
+
+**Age**
+
+```{r}
+cli_h1("[Link scale]")
+
+emmeans(mod_bnip3_gamma, specs = "age", type = "response") |> 
+  contrast(method = "pairwise", adjust = "none", infer = TRUE)
+
+cli_h1("[Response scale]")
+
+emmeans(mod_bnip3_gamma, specs = "age", regrid = "response") |>
+  contrast(method = "pairwise", adjust = "none", infer = TRUE)
+```
+
+```{r fig.width = 4, fig.height = 7}
+make_signif_boxplot(mod_bnip3_gamma, xaxis = "age")
+```
+
+**Condition:Stage**
+
+```{r}
+cli_h1("[Link scale]")
+
+emmeans(mod_bnip3_gamma, specs = ~ condition | age, type = "response") |> 
+  contrast(method = "pairwise", adjust = "none", infer = TRUE)
+
+cli_h2("[Interaction]")
+
+emmeans(mod_bnip3_gamma, specs = ~ condition | age, type = "response") |>
+  contrast(interaction = "pairwise", by = NULL, adjust = "none", infer = TRUE)
+
+cli_h1("[Response scale]")
+
+emmeans(mod_bnip3_gamma, specs = ~ condition | age, regrid = "response") |>
+  contrast(method = "pairwise", adjust = "none", infer = TRUE)
+
+cli_h2("[Interaction]")
+
+emmeans(mod_bnip3_gamma, specs = ~ condition | age, regrid = "response") |>
+  contrast(interaction = "pairwise", by = NULL, adjust = "none", infer = TRUE)
+```
+
+```{r fig.width = 14, fig.height = 6}
+make_signif_boxplot(mod_bnip3_gamma, xaxis = "condition", facet = "age", ncol = 4, max_points = Inf) |> 
+  save_png("mod_bnip3_gamma", width = 14, height = 7, display = TRUE)
+```
+
+```{r fig.height = 6, fig.width = 14}
+make_signif_boxplot_inter(
+  mod_bnip3_gamma, pred1 = "condition", pred2 = "age", facet = NULL, 
+  cluster = "rat", add_cluster_averages = TRUE, ncol = 5, max_points = Inf
+) |> 
+  save_png("mod_bnip3_gamma_inter", width = 14, height = 7)
+```

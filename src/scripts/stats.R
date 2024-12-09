@@ -33,8 +33,12 @@ get_model_based_outliers <- function(data, mod, mod_dharma, responses) {
     filter(ID %in% DHARMa::outliers(mod_dharma)) |> 
     utils::type.convert(as.is = TRUE) 
   
-  if (nrow(outliers) > 0) outliers <- semi_join(data, y = outliers) |> 
-    select(-setdiff(responses, find_response(mod)))
+  if (nrow(outliers) > 0) {
+    outliers <- semi_join(
+        mutate(data, across(everything(), as.character)), 
+        mutate(outliers, across(everything(), as.character))
+    ) |> select(-setdiff(responses, find_response(mod)))
+  }
   
   return(outliers)
 }

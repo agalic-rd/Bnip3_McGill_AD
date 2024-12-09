@@ -427,7 +427,7 @@ make_fold_timeline_plot <- function(
 #--------------------------#
 
 make_acf_plot <- function(mod) {
-  forecast::ggAcf(residuals(mod, type = "response", retype = "normalized"), color = "#1b6ca8") + 
+  forecast::ggAcf(residuals(mod, type = "response"), color = "#1b6ca8") + 
     geom_point() + 
     labs(
       title = "Autocorrelation of residuals",

@@ -16,10 +16,10 @@ cli_h2("┗ [SCRIPTS] Loading data ingestion functions")
 #-------------------------------#
 
 # Loading and shaping DAB data
-load_od_data <- function(path = configs$data$OD$od_corrected) {
+load_od_data <- function() {
   
-  od_data <- (
-    readxl::read_excel(path)
+  soma_data <- (
+    readxl::read_excel(configs$data$OD$soma_corrected)
     |> janitor::clean_names()
     |> mutate(
       section = consecutive_id(background),
@@ -39,11 +39,26 @@ load_od_data <- function(path = configs$data$OD$od_corrected) {
     |> arrange(age, condition, rat, location, section)
   )
   
-  return(od_data)
+  molecular_layer_data <- (
+    readxl::read_excel(configs$data$OD$ml_raw)
+    |> janitor::clean_names()
+    |> mutate(
+    #   od_corrected = bnip3_level - background,
+    #   od_corrected = ifelse(od_corrected < 0, 0, od_corrected),
+      age = factor(paste0("M", age), levels = c("M3", "M12", "M18")),
+      rat = factor(paste0("ID", rat)),
+      condition = factor(toupper(condition), levels = c("WT", "AD")),
+      .keep = "unused"
+    )
+    |> select(rat, age, condition, bnip3_level)
+    |> arrange(age, condition, rat)
+  )
+  
+  return(list(soma = soma_data, ml = molecular_layer_data))
 }
 
 # Deprecated
-load_od_data_old <- function(path = configs$data$OD$od_raw) {
+load_od_data_old <- function(path = configs$data$OD$soma_raw) {
   
   od_data <- (
     readxl::read_excel(path)
