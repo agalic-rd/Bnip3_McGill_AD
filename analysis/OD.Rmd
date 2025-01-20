@@ -407,7 +407,7 @@ emmeans(mod_bnip3_gamma, specs = "age", regrid = "response") |>
   contrast(method = "pairwise", adjust = "none", infer = TRUE)
 ```
 
-```{r fig.width = 4, fig.height = 7}
+```{r fig.width = 4, fig.height = 5}
 make_signif_boxplot(mod_bnip3_gamma, xaxis = "age")
 ```
 
@@ -446,4 +446,10 @@ make_signif_boxplot_inter(
   cluster = "rat", add_cluster_averages = TRUE, ncol = 5, max_points = Inf
 ) |> 
   save_png("mod_bnip3_gamma_inter", width = 14, height = 7)
+```
+
+
+```{r fig.width = 14, fig.height = 6}
+make_signif_boxplot(mod_bnip3_gamma, xaxis = "age", facet = "condition", ncol = 4, max_points = Inf) |> 
+  save_png("mod_bnip3_gamma_age", width = 14, height = 7, display = TRUE)
 ```
