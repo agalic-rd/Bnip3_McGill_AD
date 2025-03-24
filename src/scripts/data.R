@@ -30,7 +30,8 @@ load_od_data <- function() {
       age = factor(age, levels = c("M3", "M12", "M18")),
       rat = factor(rat),
       section = factor(section),
-      condition = factor(toupper(condition), levels = c("WT", "AD")),
+      factor = ifelse(toupper(condition) == "AD", "McGill", toupper(condition)),
+      condition = factor(factor, levels = c("WT", "McGill")),
       location = factor(toupper(layer)),
       .keep = "unused"
     )
@@ -47,7 +48,8 @@ load_od_data <- function() {
     #   od_corrected = ifelse(od_corrected < 0, 0, od_corrected),
       age = factor(paste0("M", age), levels = c("M3", "M12", "M18")),
       rat = factor(paste0("ID", rat)),
-      condition = factor(toupper(condition), levels = c("WT", "AD")),
+      factor = ifelse(toupper(condition) == "AD", "McGill", toupper(condition)),
+      condition = factor(factor, levels = c("WT", "McGill")),
       .keep = "unused"
     )
     |> select(rat, age, condition, bnip3_level)

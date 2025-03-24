@@ -111,6 +111,12 @@ make_signif_boxplot <- function(
     |> ungroup()
   )
   
+  x_title <- str_c(
+    ifelse(xaxis == "condition", "Genotype", stringr::str_to_title(pred1)), 
+    " across ", 
+    facet
+  )
+  
   # -----------[ Plot ]----------- #
   
   plot <- (
@@ -137,28 +143,30 @@ make_signif_boxplot <- function(
     )
     + geom_text(
       data = p_data_contrasts, aes(x = pos.x, y = pos.y, label = p.signif), inherit.aes = FALSE,
-      size = 5, color = "black", fontface = "bold", vjust = 0, hjust = 0.5, position = position_nudge(y = 0.02 * amp)
+      size = 5, color = "black", fontface = "bold", vjust = 0, hjust = 0.5, position = position_nudge(y = 0.02 * amp),
+      family = "serif"
     )
     + geom_label(
       aes(y = min - 0.05 * amp, fontface = "bold", label = N, color = .data[[xaxis]]),
-      data = extra_dat, fill = NA, size = 6, alpha = 0.7
+      data = extra_dat, fill = NA, size = 6, alpha = 0.7,
+      family = "serif"
     )
     # + scale_y_continuous(labels = function(x) format(x, scientific = TRUE))
     + theme(
+      text = element_text(family = "serif"),
       legend.position = "none", 
       panel.grid.major = element_blank(), 
-      panel.grid.minor = element_blank(), 
-      axis.title.x = element_blank(),
+      panel.grid.minor = element_blank(),
       plot.subtitle = ggtext::element_markdown(hjust = 0.5, face = "plain"),
       plot.caption = element_text(hjust = 0.5, face = "plain", size = 13),
       axis.text.x = ggplot2::element_text(size = 15),
       axis.text.y = ggplot2::element_text(size = 15)
     )
-    + labs(y = resp_name)
+    + labs(y = resp_name, x = x_title)
     + {if(!is.null(subtitle)) labs(subtitle = subtitle)}
     + {if(!is.null(caption)) labs(caption = caption)}
     + {if (!is.null(facet)) facet_wrap( ~ .data[[facet]], ncol = ncol)}
-    + {if (add_cluster_averages) labs(caption = str_glue("Small round points are individual measurements\n Diamonds represent {cluster}-averages"))}
+    #+ {if (add_cluster_averages) labs(caption = str_glue("Small round points are individual measurements\n Diamonds represent {cluster}-averages"))}
   )
 
     # -----------[ Formatted results ]----------- #
@@ -270,6 +278,15 @@ make_signif_boxplot_inter <- function(
     ) |>
     ungroup()
   
+  x_title <- str_c(
+    ifelse(pred1 == "condition", "Genotype", stringr::str_to_title(pred1)),
+    " by ",
+    ifelse(pred2 == "location", "area", pred2),
+    " across ",
+    ifelse(facet == "condition", "genotype", facet)
+  )
+  
+
   # -----------[ Plot ]----------- #
   
   plot <- (
@@ -298,11 +315,13 @@ make_signif_boxplot_inter <- function(
     )
     + geom_text(
       data = p_data_contrasts, aes(x = pos.x, y = pos.y, label = p.signif), inherit.aes = FALSE,
-      size = 5, color = "black", fontface = "bold", vjust = 0, hjust = 0.5, position = position_nudge(y = 0.02 * amp)
+      size = 5, color = "black", fontface = "bold", vjust = 0, hjust = 0.5, position = position_nudge(y = 0.02 * amp),
+      family = "serif"
     )
     + geom_label(
       aes(y = min - 0.05 * amp, fontface = "bold", label = N, color = .data[[pred1]]), 
-      data = extra_dat, fill = NA, size = 6, alpha = 0.7
+      data = extra_dat, fill = NA, size = 6, alpha = 0.7,
+      family = "serif"
     )
     ## Interactions
     + geom_errorbarh(
@@ -311,19 +330,21 @@ make_signif_boxplot_inter <- function(
     )
     + geom_text(
       data = p_data_interactions, aes(x = pos.x, y = pos.y, label = p.signif), inherit.aes = FALSE,
-      size = 5, color = "black", fontface = "bold", vjust = 0, hjust = 0.5, position = position_nudge(y = 0.02 * amp)
+      size = 5, color = "black", fontface = "bold", vjust = 0, hjust = 0.5, position = position_nudge(y = 0.02 * amp),
+      family = "serif"
     )
     + theme(
+      text = element_text(family = "serif"),
       legend.position = "none",
       plot.subtitle = ggtext::element_markdown(hjust = 0.5, face = "plain"),
       axis.text.x = ggplot2::element_text(size = 15),
       axis.text.y = ggplot2::element_text(size = 15),
       plot.caption = ggplot2::element_text(size = 13)
     )
-    + labs(y = resp_name, x = str_c(stringr::str_to_title(pred1), " by ", stringr::str_to_title(pred2)))
+    + labs(y = resp_name, x = x_title)
     + {if(!is.null(stage)) labs(subtitle = str_glue("{stage}"))}
     + {if (!is.null(facet)) facet_wrap( ~ .data[[facet]], ncol = ncol)}
-    + {if (add_cluster_averages) labs(caption = str_glue("Small round points are individual measurements\n Diamonds represent {cluster}-averages"))}
+    #+ {if (add_cluster_averages) labs(caption = str_glue("Small round points are individual measurements\n Diamonds represent {cluster}-averages"))}
     + scale_x_discrete(labels = \(l) str_replace(l, "_", "\n"))
   )
 
