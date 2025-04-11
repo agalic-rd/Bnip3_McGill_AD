@@ -1,8 +1,8 @@
 <div align="center">
 
-    <h1>Bnip3 expression in Alzheimer's disease rat model</h1>
+<h1>Bnip3 expression in Alzheimer's disease rat model</h1>
  
-    [![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-blue.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-blue.svg)](https://creativecommons.org/licenses/by/4.0/)
 <!--  [![DOI](https://zenodo.org/badge/XXXXX.svg)](https://zenodo.org/badge/latestdoi/XXXXX) -->
 
 </div>
