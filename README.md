@@ -1,9 +1,11 @@
-# Bnip3 expression in Alzheimer's disease rat model
+<div align="center">
 
-## _Main branch_
-
-[![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+    <h1>Bnip3 expression in Alzheimer's disease rat model</h1>
+ 
+    [![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-blue.svg)](https://creativecommons.org/licenses/by/4.0/)
 <!--  [![DOI](https://zenodo.org/badge/XXXXX.svg)](https://zenodo.org/badge/latestdoi/XXXXX) -->
+
+</div>
 
 > **Note**  
 > This repository contains the data and R code for the _"Bnip3 expression in the brain of an Alzheimer's disease rat model"_ paper
@@ -27,9 +29,7 @@
 
 ## 📜 License
 
-This project is licensed under the Creative Commons Attribution 4.0
-International License - see the [LICENSE.md](LICENSE.md) file for details (if applicable)
-or visit [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+This project is licensed under the Creative Commons Attribution 4.0 International License - see the [LICENSE](LICENSE) file for details, or visit [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 ## 💬 Citation
 
