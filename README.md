@@ -48,11 +48,9 @@ This project is licensed under the Creative Commons Attribution 4.0 Internationa
 
 ## 📫 Contact
 
-For questions regarding the analyses, please contact: **Agalic Rodriguez-Duboc**:
-<a href="mailto:agalic.rodriguez.duboc@ntnu.no?subject=Bnip3%20McGill%20AD%20project">![Gmail](https://img.shields.io/badge/Gmail-C71610?style=flat-square&labelColor=white&logo=Gmail&logoColor=C71610)</a>
+For questions regarding the analyses, please contact: [**Agalic Rodriguez-Duboc**](mailto:agalic.rodriguez.duboc@ntnu.no?subject=Bnip3%20McGill%20AD%20project)
 
-For any other questions, please contact the corresponding author: **Asgeir Kobro-Flatmoen**:
-<a href="mailto:asgeir.kobro-flatmoen@ntnu.no?subject=Bnip3%20McGill%20AD%20project">![Gmail](https://img.shields.io/badge/Gmail-C71610?style=flat-square&labelColor=white&logo=Gmail&logoColor=C71610)</a>
+For any other questions, please contact the corresponding author: [**Asgeir Kobro-Flatmoen**](mailto:asgeir.kobro-flatmoen@ntnu.no?subject=Bnip3%20McGill%20AD%20project)
 
 <!----------------------------------->
 
