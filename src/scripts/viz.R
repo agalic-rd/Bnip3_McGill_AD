@@ -42,7 +42,7 @@ corr_matrix_plot <- function(dat, vars, title = "") {
 ## Generating a boxplot for an individual gene, showing the main effect of a predictor (using the model fitted to this gene's data as input)
 make_signif_boxplot <- function(
     mod, xaxis = "condition", facet = NULL, cluster = "rat", add_cluster_averages = TRUE, subtitle = NULL, caption = NULL, 
-    scale = "link", adjust = "none", method = "pairwise", resp_name = NULL, max_points = 50, ncol = 2, print_eqs = TRUE
+    scale = "link", adjust = "none", method = "pairwise", resp_name = NULL, max_points = 50, ncol = 2, print_eqs = FALSE
 ) {
   
   get_n_units <- function(df) {
@@ -112,7 +112,7 @@ make_signif_boxplot <- function(
   )
   
   x_title <- str_c(
-    ifelse(xaxis == "condition", "Genotype", stringr::str_to_title(pred1)), 
+    ifelse(xaxis == "condition", "Genotype", stringr::str_to_title(xaxis)), 
     " across ", 
     facet
   )
@@ -193,7 +193,7 @@ make_signif_boxplot <- function(
 ## Generating a boxplot for an individual gene, showing interaction effects between two predictors (using the model fitted to this gene's data as input)
 make_signif_boxplot_inter <- function(
     mod, pred1 = "condition", pred2, facet = NULL, cluster = NULL, add_cluster_averages = FALSE, stage = NULL,
-    scale = "link", adjust = "none", resp_name = NULL, max_points = 50, ncol = 2, print_eqs = TRUE
+    scale = "link", adjust = "none", resp_name = NULL, max_points = 50, ncol = 2, print_eqs = FALSE
 ) {
   
   get_n_units <- function(df) {
@@ -281,12 +281,17 @@ make_signif_boxplot_inter <- function(
   x_title <- str_c(
     ifelse(pred1 == "condition", "Genotype", stringr::str_to_title(pred1)),
     " by ",
-    ifelse(pred2 == "location", "area", pred2),
-    " across ",
-    ifelse(facet == "condition", "genotype", facet)
+    ifelse(pred2 == "location", "area", pred2)
   )
-  
 
+  if (!is.null(facet)) {
+    x_title <- str_c(
+      x_title,
+      " across ",
+      ifelse(facet == "condition", "genotype", facet)
+    )
+  }
+  
   # -----------[ Plot ]----------- #
   
   plot <- (
@@ -319,8 +324,9 @@ make_signif_boxplot_inter <- function(
       family = "serif"
     )
     + geom_label(
-      aes(y = min - 0.05 * amp, fontface = "bold", label = N, color = .data[[pred1]]), 
-      data = extra_dat, fill = NA, size = 6, alpha = 0.7,
+      # Use group-specific min/amp for y-positioning
+      aes(y = min - 0.05 * amp, fontface = "bold", label = N, color = .data[[pred1]]),
+      data = extra_dat, fill = NA, size = 5, alpha = 0.7, # Reduced size slightly
       family = "serif"
     )
     ## Interactions

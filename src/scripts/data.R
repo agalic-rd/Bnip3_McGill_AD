@@ -4,13 +4,6 @@
 
 cli_h2("┗ [SCRIPTS] Loading data ingestion functions")
 
-#-------------------------#
-####🔺Helper functions ####
-#-------------------------#
-
-
-
-
 #-------------------------------#
 ####🔺Data loading functions ####
 #-------------------------------#
@@ -23,7 +16,7 @@ load_od_data <- function() {
     |> janitor::clean_names()
     |> mutate(
       section = consecutive_id(background),
-      od_corrected = as.numeric(od_corrected_new), # cell_dab_od_mean, background
+      od_corrected = as.numeric(od_corrected),
       od_corrected = ifelse(od_corrected < 0, 0, od_corrected),
       age = paste0("M", age),
       rat = paste0("ID", rat),
@@ -44,15 +37,14 @@ load_od_data <- function() {
     readxl::read_excel(configs$data$OD$ml_raw)
     |> janitor::clean_names()
     |> mutate(
-    #   od_corrected = bnip3_level - background,
-    #   od_corrected = ifelse(od_corrected < 0, 0, od_corrected),
+      od_corrected = ifelse(od_corrected < 0, 0, od_corrected),
       age = factor(paste0("M", age), levels = c("M3", "M12", "M18")),
       rat = factor(paste0("ID", rat)),
       factor = ifelse(toupper(condition) == "AD", "McGill", toupper(condition)),
       condition = factor(factor, levels = c("WT", "McGill")),
       .keep = "unused"
     )
-    |> select(rat, age, condition, bnip3_level)
+    |> select(rat, age, condition, od_corrected)
     |> arrange(age, condition, rat)
   )
   

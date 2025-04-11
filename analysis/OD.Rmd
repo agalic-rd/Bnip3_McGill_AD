@@ -1,6 +1,5 @@
 ```{r}
 source(here::here("src", "setup.R"), echo = FALSE)
-
 ```
 
 <!----------------------------------------------------------------------------->
@@ -18,45 +17,13 @@ source(here::here("src", "setup.R"), echo = FALSE)
 ***
 
 <!----------------------------------------------------------------------------->
-## 1. Separately:
-***
-
-**Temporary**
-
-```{r}
-make_mod_od <- function(data) {
-  glmmTMB(
-    od_corrected ~ condition + (1 | rat),
-    # dispformula = ~ condition,
-    family = Gamma("log"),
-    data = data,
-    REML = TRUE
-  )
-}
-
-res <- optical_density$soma |>
-  group_by(age, location) |> 
-  group_map(function(d, g) {
-    make_signif_boxplot(make_mod_od(d), xaxis = "condition", subtitle = paste0(g$age, " + ", g$location))
-  })
-
-res |> wrap_plots()
-```
-
-
-<!----------------------------------------------------------------------------->
-## 2. Combined:
-***
-
-<!----------------------------------------------------------------------------->
-### Models
+## 1. Models
 
 **Gamma**
 
 ```{r}
-mod_od_gamma_tot <- glmmTMB(
+mod_od_gamma_tot <- glmmTMB::glmmTMB(
   od_corrected ~ condition * age * location + (1 | rat / section),
-  # dispformula = ~ age * location,
   family = Gamma("log"),
   data = optical_density$soma,
   REML = TRUE
@@ -69,17 +36,15 @@ performance(mod_od_gamma_tot)
 ```
 
 <!----------------------------------------------------------------------------->
-### Model Diagnostics
+## 2. Model Diagnostics
 
-#### Residual diagnostics
+### Residual diagnostics
 
 ```{r fig.width = 10}
-check_model(mod_od_gamma_tot)
-
-make_acf_plot(mod_od_gamma_tot)
+# check_model(mod_od_gamma_tot) # Very slow
 ```
 
-#### Predictive checks
+### Predictive checks
 
 ```{r}
 mod_od_gamma_tot_dharma <- DHARMa::simulateResiduals(mod_od_gamma_tot, plot = FALSE, n = 300, seed = getOption("seed"))
@@ -96,16 +61,16 @@ ppc_stat_plots(mod_od_gamma_tot, simulations = mod_od_gamma_tot_dharma_t, term =
 ppc_stat_plots(mod_od_gamma_tot, simulations = mod_od_gamma_tot_dharma_t, term = "age")
 ```
 
-#### Potential outliers
+### Potential outliers
 
 ```{r}
-get_model_based_outliers(optical_density$soma, mod_od_gamma_tot, mod_od_gamma_tot_dharma, c("od_corrected"))
+get_model_based_outliers(optical_density$soma, mod_od_gamma_tot, mod_od_gamma_tot_dharma, "od_corrected")
 ```
 
 <!----------------------------------------------------------------------------->
-### Model Analysis
+## 3. Model Analysis
 
-#### Model parameters
+### Model parameters
 
 **All effects (Wald):**
 
@@ -122,7 +87,7 @@ parameters(
 car::Anova(mod_od_gamma_tot, type = 3)
 ```
 
-#### Marginal means
+### Marginal means
 
 **Condition**
 
@@ -153,16 +118,14 @@ emmeans(mod_od_gamma_tot, specs = "age", regrid = "response")
 ```{r}
 cli_h1("[Observed]")
 
-distribution_summary(get_data(mod_od_gamma_tot), dvs = find_response(mod_od_gamma_tot), between = c("condition", "age")) |>
-  as.data.frame() |> 
-  write_xlsx(here::here("data", "stats.xlsx"))
+distribution_summary(get_data(mod_od_gamma_tot), dvs = find_response(mod_od_gamma_tot), between = c("condition", "age"))
 
 cli_h1("[Emmeans]")
 
 emmeans(mod_od_gamma_tot, specs = ~ condition | age, regrid = "response")
 ```
 
-#### Contrasts
+### Contrasts
 
 **Condition**
 
@@ -238,11 +201,6 @@ make_signif_boxplot_inter(
 ```
 
 ```{r fig.height = 6, fig.width = 14}
-# emmeans(mod_od_gamma_tot, specs = ~ age | location * condition, type = "response") |> 
-#   contrast(method = "pairwise", adjust = "none", infer = TRUE)
-```
-
-```{r fig.height = 6, fig.width = 14}
 make_signif_boxplot_inter(
   mod_od_gamma_tot, pred1 = "age", pred2 = "location", facet = "condition", 
   cluster = "rat", add_cluster_averages = TRUE, ncol = 5, max_points = Inf
@@ -257,18 +215,13 @@ make_signif_boxplot_inter(
 ***
 
 <!----------------------------------------------------------------------------->
-## 2. Combined:
-***
-
-<!----------------------------------------------------------------------------->
-### Models
+## 1. Models
 
 **Gamma**
 
 ```{r}
 mod_bnip3_gamma <- glmmTMB(
-  bnip3_level ~ condition * age + (1 | rat),
-  # dispformula = ~ age * location,
+  od_corrected ~ condition * age + (1 | rat),
   family = Gamma("log"),
   data = optical_density$ml,
   REML = TRUE
@@ -281,9 +234,9 @@ performance(mod_bnip3_gamma)
 ```
 
 <!----------------------------------------------------------------------------->
-### Model Diagnostics
+## 2. Model Diagnostics
 
-#### Residual diagnostics
+### Residual diagnostics
 
 ```{r fig.width = 10}
 check_model(mod_bnip3_gamma)
@@ -291,7 +244,7 @@ check_model(mod_bnip3_gamma)
 make_acf_plot(mod_bnip3_gamma)
 ```
 
-#### Predictive checks
+### Predictive checks
 
 ```{r}
 mod_bnip3_gamma_dharma <- DHARMa::simulateResiduals(mod_bnip3_gamma, plot = FALSE, n = 300, seed = getOption("seed"))
@@ -308,16 +261,16 @@ ppc_stat_plots(mod_bnip3_gamma, simulations = mod_bnip3_gamma_dharma_t, term = "
 ppc_stat_plots(mod_bnip3_gamma, simulations = mod_bnip3_gamma_dharma_t, term = "age")
 ```
 
-#### Potential outliers
+### Potential outliers
 
 ```{r}
-get_model_based_outliers(optical_density$ml, mod_bnip3_gamma, mod_bnip3_gamma_dharma, c("bnip3_level"))
+get_model_based_outliers(optical_density$ml, mod_bnip3_gamma, mod_bnip3_gamma_dharma, "od_corrected")
 ```
 
 <!----------------------------------------------------------------------------->
-### Model Analysis
+## 3. Model Analysis
 
-#### Model parameters
+### Model parameters
 
 **All effects (Wald):**
 
@@ -334,7 +287,7 @@ parameters(
 car::Anova(mod_bnip3_gamma, type = 3)
 ```
 
-#### Marginal means
+### Marginal means
 
 **Condition**
 
@@ -365,16 +318,14 @@ emmeans(mod_bnip3_gamma, specs = "age", regrid = "response")
 ```{r}
 cli_h1("[Observed]")
 
-distribution_summary(get_data(mod_bnip3_gamma), dvs = find_response(mod_bnip3_gamma), between = c("condition", "age")) |>
-  as.data.frame() |> 
-  write_xlsx(here::here("data", "stats.xlsx"))
+distribution_summary(get_data(mod_bnip3_gamma), dvs = find_response(mod_bnip3_gamma), between = c("condition", "age"))
 
 cli_h1("[Emmeans]")
 
 emmeans(mod_bnip3_gamma, specs = ~ condition | age, regrid = "response")
 ```
 
-#### Contrasts
+### Contrasts
 
 **Condition**
 
