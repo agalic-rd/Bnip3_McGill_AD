@@ -1,6 +1,5 @@
 data:
   data_dict: !expr here::here("data", "__data_dictionary.xlsx")
   OD:
-    soma_raw: !expr here::here("data", "Bnip_all_clean.xlsx")
-    soma_corrected: !expr here::here("data", "matched_data.xlsx")
-    ml_raw: !expr here::here("data", "HF_quantification_clean.xlsx")
+    soma_raw: !expr here::here("data", "EC_quantification_data.xlsx")
+    ml_raw: !expr here::here("data", "HF_quantification_data.xlsx")

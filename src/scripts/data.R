@@ -19,7 +19,7 @@ cli_h2("┗ [SCRIPTS] Loading data ingestion functions")
 load_od_data <- function() {
   
   soma_data <- (
-    readxl::read_excel(configs$data$OD$soma_corrected)
+    readxl::read_excel(configs$data$OD$soma_raw)
     |> janitor::clean_names()
     |> mutate(
       section = consecutive_id(background),
@@ -57,29 +57,4 @@ load_od_data <- function() {
   )
   
   return(list(soma = soma_data, ml = molecular_layer_data))
-}
-
-# Deprecated
-load_od_data_old <- function(path = configs$data$OD$soma_raw) {
-  
-  od_data <- (
-    readxl::read_excel(path)
-    |> janitor::clean_names()
-    |> mutate(
-      section = consecutive_id(background_od),
-      od_corrected = cell_od_mean - background_od,
-      age = paste0("M", age),
-      rat = paste0("ID", rat),
-      age = factor(age, levels = c("M3", "M12", "M18")),
-      rat = factor(rat),
-      section = factor(section),
-      condition = factor(toupper(condition)),
-      location = factor(toupper(layer)),
-      .keep = "unused"
-    )
-    |> filter(od_corrected > 0)
-    |> arrange(age, condition, rat, location, section)
-  )
-  
-  return(od_data)
 }
