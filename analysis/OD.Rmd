@@ -19,8 +19,6 @@ source(here::here("src", "setup.R"), echo = FALSE)
 <!----------------------------------------------------------------------------->
 ## 1. Models
 
-**Gamma**
-
 ```{r}
 mod_od_gamma_tot <- glmmTMB::glmmTMB(
   od_corrected ~ condition * age * location + (1 | rat / section),
@@ -70,6 +68,10 @@ get_model_based_outliers(optical_density$soma, mod_od_gamma_tot, mod_od_gamma_to
 <!----------------------------------------------------------------------------->
 ## 3. Model Analysis
 
+```{r}
+p_adjust <- "holm"
+```
+
 ### Model parameters
 
 **All effects (Wald):**
@@ -77,7 +79,7 @@ get_model_based_outliers(optical_density$soma, mod_od_gamma_tot, mod_od_gamma_to
 ```{r}
 parameters(
   mod_od_gamma_tot, exponentiate = should_exp(mod_od_gamma_tot),
-  ci_method = "Wald", p_adjust = "none", summary = TRUE, digits = 3
+  ci_method = "Wald", p_adjust = p_adjust, summary = TRUE, digits = 3
 )
 ```
 
@@ -130,15 +132,8 @@ emmeans(mod_od_gamma_tot, specs = ~ condition | age, regrid = "response")
 **Condition**
 
 ```{r}
-cli_h1("[Link scale]")
-
 emmeans(mod_od_gamma_tot, specs = "condition", type = "response") |> 
-  contrast(method = "pairwise", adjust = "none", infer = TRUE)
-
-cli_h1("[Response scale]")
-
-emmeans(mod_od_gamma_tot, specs = "condition", regrid = "response") |>
-  contrast(method = "pairwise", adjust = "none", infer = TRUE)
+  contrast(method = "pairwise", adjust = p_adjust, infer = TRUE)
 ```
 
 ```{r fig.width = 4, fig.height = 7}
@@ -148,54 +143,39 @@ make_signif_boxplot(mod_od_gamma_tot, xaxis = "condition")
 **Age**
 
 ```{r}
-cli_h1("[Link scale]")
-
 emmeans(mod_od_gamma_tot, specs = "age", type = "response") |> 
-  contrast(method = "pairwise", adjust = "none", infer = TRUE)
-
-cli_h1("[Response scale]")
-
-emmeans(mod_od_gamma_tot, specs = "age", regrid = "response") |>
-  contrast(method = "pairwise", adjust = "none", infer = TRUE)
+  contrast(method = "pairwise", adjust = p_adjust, infer = TRUE)
 ```
 
 ```{r fig.width = 4, fig.height = 7}
-make_signif_boxplot(mod_od_gamma_tot, xaxis = "age")
+make_signif_boxplot(mod_od_gamma_tot, xaxis = "age", adjust = p_adjust)
 ```
 
-**Condition:Stage**
+**Condition:Age**
 
 ```{r}
-cli_h1("[Link scale]")
-
 emmeans(mod_od_gamma_tot, specs = ~ condition | age, type = "response") |> 
-  contrast(method = "pairwise", adjust = "none", infer = TRUE)
+  contrast(method = "pairwise", adjust = "none", infer = TRUE) |> 
+  as.data.frame() |> 
+  modify_at("p.value", \(x) p.adjust(x, method = "holm"))
 
 cli_h2("[Interaction]")
 
 emmeans(mod_od_gamma_tot, specs = ~ condition | age, type = "response") |>
-  contrast(interaction = "pairwise", by = NULL, adjust = "none", infer = TRUE)
-
-cli_h1("[Response scale]")
-
-emmeans(mod_od_gamma_tot, specs = ~ condition | age, regrid = "response") |>
-  contrast(method = "pairwise", adjust = "none", infer = TRUE)
-
-cli_h2("[Interaction]")
-
-emmeans(mod_od_gamma_tot, specs = ~ condition | age, regrid = "response") |>
-  contrast(interaction = "pairwise", by = NULL, adjust = "none", infer = TRUE)
+  contrast(interaction = "pairwise", by = NULL, adjust = "none", infer = TRUE) |> 
+  as.data.frame() |> 
+  modify_at("p.value", \(x) p.adjust(x, method = "holm"))
 ```
 
 ```{r fig.width = 14, fig.height = 6}
-make_signif_boxplot(mod_od_gamma_tot, xaxis = "condition", facet = "age", ncol = 4, max_points = Inf) |> 
+make_signif_boxplot(mod_od_gamma_tot, xaxis = "condition", facet = "age", ncol = 4, max_points = Inf, adjust = p_adjust) |> 
   save_png("mod_od_gamma_tot", width = 14, height = 7, display = TRUE)
 ```
 
 ```{r fig.height = 6, fig.width = 14}
 make_signif_boxplot_inter(
   mod_od_gamma_tot, pred1 = "condition", pred2 = "location", facet = "age", 
-  cluster = "rat", add_cluster_averages = TRUE, ncol = 5, max_points = Inf
+  cluster = "rat", add_cluster_averages = TRUE, ncol = 5, max_points = Inf, adjust = p_adjust
 ) |> 
   save_png("mod_od_gamma_inter", width = 14, height = 7)
 ```
@@ -203,7 +183,7 @@ make_signif_boxplot_inter(
 ```{r fig.height = 6, fig.width = 14}
 make_signif_boxplot_inter(
   mod_od_gamma_tot, pred1 = "age", pred2 = "location", facet = "condition", 
-  cluster = "rat", add_cluster_averages = TRUE, ncol = 5, max_points = Inf
+  cluster = "rat", add_cluster_averages = TRUE, ncol = 5, max_points = Inf, adjust = p_adjust
 ) |> 
   save_png("mod_od_gamma_inter_age", width = 14, height = 7)
 ```
@@ -211,13 +191,108 @@ make_signif_boxplot_inter(
 
 <!----------------------------------------------------------------------------->
 <!----------------------------------------------------------------------------->
-# III. Molecular Layer:
+# III. Soma-Pooled:
 ***
 
 <!----------------------------------------------------------------------------->
 ## 1. Models
 
-**Gamma**
+```{r}
+mod_od_gamma_pooled <- glmmTMB::glmmTMB(
+  od_corrected ~ condition + (1 | rat / section),
+  family = Gamma("log"),
+  data = optical_density$soma,
+  REML = TRUE
+)
+
+cli_h1("[Parameters]")
+parameters(mod_od_gamma_pooled)
+cli_h1("[Fitness]")
+performance(mod_od_gamma_pooled)
+```
+
+<!----------------------------------------------------------------------------->
+## 2. Model Diagnostics
+
+### Residual diagnostics
+
+```{r fig.width = 10}
+# check_model(mod_od_gamma_pooled) # Slow
+```
+
+### Predictive checks
+
+```{r}
+mod_od_gamma_pooled_dharma <- DHARMa::simulateResiduals(mod_od_gamma_pooled, plot = FALSE, n = 300, seed = getOption("seed"))
+mod_od_gamma_pooled_dharma_t <- t(mod_od_gamma_pooled_dharma$simulatedResponse)
+```
+
+```{r fig.width = 10}
+ppc_plots(mod_od_gamma_pooled, simulations = mod_od_gamma_pooled_dharma_t, term = "condition")
+```
+
+```{r fig.width = 10}
+ppc_stat_plots(mod_od_gamma_pooled, simulations = mod_od_gamma_pooled_dharma_t, term = "condition")
+```
+
+### Potential outliers
+
+```{r}
+get_model_based_outliers(optical_density$soma, mod_od_gamma_pooled, mod_od_gamma_pooled_dharma, "od_corrected")
+```
+
+<!----------------------------------------------------------------------------->
+## 3. Model Analysis
+
+### Model parameters
+
+**All effects (Wald):**
+
+```{r}
+parameters(
+  mod_od_gamma_pooled, exponentiate = should_exp(mod_od_gamma_pooled),
+  ci_method = "Wald", p_adjust = "none", summary = TRUE, digits = 3
+)
+```
+
+**Main effects (Wald):**
+
+```{r}
+car::Anova(mod_od_gamma_pooled, type = 3)
+```
+
+### Marginal means
+
+```{r}
+cli_h1("[Observed]")
+
+distribution_summary(get_data(mod_od_gamma_pooled), dvs = find_response(mod_od_gamma_pooled), between = "condition")
+
+cli_h1("[Emmeans]")
+
+emmeans(mod_od_gamma_pooled, specs = "condition", regrid = "response")
+```
+
+### Contrasts
+
+```{r}
+emmeans(mod_od_gamma_pooled, specs = "condition", type = "response") |> 
+  contrast(method = "pairwise", adjust = "none", infer = TRUE)
+```
+
+```{r fig.width = 6, fig.height = 7}
+make_signif_boxplot(mod_od_gamma_pooled, xaxis = "condition", max_points = Inf) |> 
+  save_png("mod_od_gamma_pooled", width = 6, height = 7, display = TRUE)
+```
+
+
+<!----------------------------------------------------------------------------->
+<!----------------------------------------------------------------------------->
+# IV. Molecular Layer:
+***
+
+<!----------------------------------------------------------------------------->
+## 1. Models
 
 ```{r}
 mod_bnip3_gamma <- glmmTMB(
@@ -270,6 +345,10 @@ get_model_based_outliers(optical_density$ml, mod_bnip3_gamma, mod_bnip3_gamma_dh
 <!----------------------------------------------------------------------------->
 ## 3. Model Analysis
 
+```{r}
+p_adjust <- "holm"
+```
+
 ### Model parameters
 
 **All effects (Wald):**
@@ -277,7 +356,7 @@ get_model_based_outliers(optical_density$ml, mod_bnip3_gamma, mod_bnip3_gamma_dh
 ```{r}
 parameters(
   mod_bnip3_gamma, exponentiate = should_exp(mod_bnip3_gamma),
-  ci_method = "Wald", p_adjust = "none", summary = TRUE, digits = 3
+  ci_method = "Wald", p_adjust = p_adjust, summary = TRUE, digits = 3
 )
 ```
 
@@ -330,15 +409,8 @@ emmeans(mod_bnip3_gamma, specs = ~ condition | age, regrid = "response")
 **Condition**
 
 ```{r}
-cli_h1("[Link scale]")
-
 emmeans(mod_bnip3_gamma, specs = "condition", type = "response") |> 
-  contrast(method = "pairwise", adjust = "none", infer = TRUE)
-
-cli_h1("[Response scale]")
-
-emmeans(mod_bnip3_gamma, specs = "condition", regrid = "response") |>
-  contrast(method = "pairwise", adjust = "none", infer = TRUE)
+  contrast(method = "pairwise", adjust = p_adjust, infer = TRUE)
 ```
 
 ```{r fig.width = 4, fig.height = 7}
@@ -348,60 +420,44 @@ make_signif_boxplot(mod_bnip3_gamma, xaxis = "condition")
 **Age**
 
 ```{r}
-cli_h1("[Link scale]")
-
 emmeans(mod_bnip3_gamma, specs = "age", type = "response") |> 
-  contrast(method = "pairwise", adjust = "none", infer = TRUE)
-
-cli_h1("[Response scale]")
-
-emmeans(mod_bnip3_gamma, specs = "age", regrid = "response") |>
-  contrast(method = "pairwise", adjust = "none", infer = TRUE)
+  contrast(method = "pairwise", adjust = p_adjust, infer = TRUE)
 ```
 
 ```{r fig.width = 4, fig.height = 5}
-make_signif_boxplot(mod_bnip3_gamma, xaxis = "age")
+make_signif_boxplot(mod_bnip3_gamma, xaxis = "age", adjust = p_adjust)
 ```
 
-**Condition:Stage**
+**Condition:Age**
 
 ```{r}
-cli_h1("[Link scale]")
-
 emmeans(mod_bnip3_gamma, specs = ~ condition | age, type = "response") |> 
-  contrast(method = "pairwise", adjust = "none", infer = TRUE)
+  contrast(method = "pairwise", adjust = "none", infer = TRUE) |> 
+  as.data.frame() |> 
+  modify_at("p.value", \(x) p.adjust(x, method = "holm"))
 
 cli_h2("[Interaction]")
 
 emmeans(mod_bnip3_gamma, specs = ~ condition | age, type = "response") |>
-  contrast(interaction = "pairwise", by = NULL, adjust = "none", infer = TRUE)
-
-cli_h1("[Response scale]")
-
-emmeans(mod_bnip3_gamma, specs = ~ condition | age, regrid = "response") |>
-  contrast(method = "pairwise", adjust = "none", infer = TRUE)
-
-cli_h2("[Interaction]")
-
-emmeans(mod_bnip3_gamma, specs = ~ condition | age, regrid = "response") |>
-  contrast(interaction = "pairwise", by = NULL, adjust = "none", infer = TRUE)
+  contrast(interaction = "pairwise", by = NULL, adjust = "none", infer = TRUE) |> 
+  as.data.frame() |> 
+  modify_at("p.value", \(x) p.adjust(x, method = "holm"))
 ```
 
 ```{r fig.width = 14, fig.height = 6}
-make_signif_boxplot(mod_bnip3_gamma, xaxis = "condition", facet = "age", ncol = 4, max_points = Inf) |> 
+make_signif_boxplot(mod_bnip3_gamma, xaxis = "condition", facet = "age", ncol = 4, max_points = Inf, adjust = p_adjust) |> 
   save_png("mod_bnip3_gamma", width = 14, height = 7, display = TRUE)
 ```
 
 ```{r fig.height = 6, fig.width = 14}
 make_signif_boxplot_inter(
   mod_bnip3_gamma, pred1 = "condition", pred2 = "age", facet = NULL, 
-  cluster = "rat", add_cluster_averages = TRUE, ncol = 5, max_points = Inf
+  cluster = "rat", add_cluster_averages = TRUE, ncol = 5, max_points = Inf, adjust = p_adjust
 ) |> 
   save_png("mod_bnip3_gamma_inter", width = 14, height = 7)
 ```
 
-
 ```{r fig.width = 14, fig.height = 6}
-make_signif_boxplot(mod_bnip3_gamma, xaxis = "age", facet = "condition", ncol = 4, max_points = Inf) |> 
+make_signif_boxplot(mod_bnip3_gamma, xaxis = "age", facet = "condition", ncol = 4, max_points = Inf, adjust = p_adjust) |> 
   save_png("mod_bnip3_gamma_age", width = 14, height = 7, display = TRUE)
 ```

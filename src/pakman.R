@@ -35,7 +35,7 @@ set_github_pat <- function() {
   if (github_pat == "" & isTRUE(secrets$github_pat != ""))
     github_pat <- secrets$github_pat
   
-  if(github_pat != "") {
+  if (github_pat != "") {
     cli::cli_alert_success("[PACKAGES] GITHUB Access Token found: {github_pat}")
     Sys.setenv(GITHUB_PAT = github_pat)
   }
