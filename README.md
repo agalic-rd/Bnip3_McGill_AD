@@ -33,7 +33,7 @@ This project is licensed under the Creative Commons Attribution 4.0 Internationa
 
 ## 💬 Citation
 
-* **Paper:** _TBA_
+* **Paper:** Rodriguez-Duboc, A., Velicer, S. T., & Kobro-Flatmoen, A. (2025). Bnip3 expression in the brain of an Alzheimer’s disease rat model. Brain Mechanisms, 148–150, 202518. [https://doi.org/10.1016/j.bramec.2025.202518](https://doi.org/10.1016/j.bramec.2025.202518)
 * **Code:** Agalic Rodriguez-Duboc, & Marc-Aurèle Rivière. (2025). agalic-rd/Bnip3_McGill_AD: Initial release (v0.1). Zenodo. https://doi.org/10.5281/zenodo.15199697
 
 ## ✨ Contributors
