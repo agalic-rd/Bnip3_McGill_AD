@@ -13,7 +13,6 @@
 ## ❔ Requirements
 
 * R version 4.3 or newer
-* R Studio version 2022.07 or newer
 
 ## 💻 Repository structure
 
