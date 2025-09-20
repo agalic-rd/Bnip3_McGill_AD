@@ -32,7 +32,7 @@ set_github_pat <- function() {
   
   github_pat <- Sys.getenv("GITHUB_PAT")
   
-  if (github_pat == "" & isTRUE(secrets$github_pat != ""))
+  if (github_pat == "" && isTRUE(secrets$github_pat != ""))
     github_pat <- secrets$github_pat
   
   if (github_pat != "") {
@@ -120,4 +120,3 @@ get_pkg_version <- function(pkg) {
   }
   return(NA_character_)
 }
-

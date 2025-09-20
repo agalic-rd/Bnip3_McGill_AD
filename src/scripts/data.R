@@ -23,14 +23,14 @@ load_od_data <- function() {
       age = factor(age, levels = c("M3", "M12", "M18")),
       rat = factor(rat),
       section = factor(section),
-      factor = ifelse(toupper(condition) == "AD", "McGill", toupper(condition)),
-      condition = factor(factor, levels = c("WT", "McGill")),
-      location = factor(toupper(layer)),
+      genotype_recoded = ifelse(toupper(genotype) == "AD", "McGill", toupper(genotype)),
+      genotype = factor(genotype_recoded, levels = c("WT", "McGill")),
+      area = factor(toupper(area)),
       .keep = "unused"
     )
     |> filter(od_corrected > 0)
-    |> select(rat, age, condition, location, section, od_corrected)
-    |> arrange(age, condition, rat, location, section)
+    |> select(rat, age, genotype, area, section, od_corrected)
+    |> arrange(age, genotype, rat, area, section)
   )
   
   molecular_layer_data <- (
@@ -40,12 +40,12 @@ load_od_data <- function() {
       od_corrected = ifelse(od_corrected < 0, 0, od_corrected),
       age = factor(paste0("M", age), levels = c("M3", "M12", "M18")),
       rat = factor(paste0("ID", rat)),
-      factor = ifelse(toupper(condition) == "AD", "McGill", toupper(condition)),
-      condition = factor(factor, levels = c("WT", "McGill")),
+      genotype_recoded = ifelse(toupper(genotype) == "AD", "McGill", toupper(genotype)),
+      genotype = factor(genotype_recoded, levels = c("WT", "McGill")),
       .keep = "unused"
     )
-    |> select(rat, age, condition, od_corrected)
-    |> arrange(age, condition, rat)
+    |> select(rat, age, genotype, od_corrected)
+    |> arrange(age, genotype, rat)
   )
   
   return(list(soma = soma_data, ml = molecular_layer_data))

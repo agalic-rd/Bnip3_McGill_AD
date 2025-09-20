@@ -67,6 +67,6 @@ cli_h1("[SCRIPTS] Loading project scripts")
 scripts_dir <- here("src", "scripts")
 
 list.files(scripts_dir, pattern = "*.R") |> 
-  grep(pattern = 'setup|init|config|theme|pakman', invert = TRUE, value = TRUE) |> 
+  grep(pattern = "setup|init|config|theme|pakman", invert = TRUE, value = TRUE) |> 
   sapply(\(file) source(here(scripts_dir, file), echo = FALSE)) |> 
   invisible()

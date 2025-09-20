@@ -8,21 +8,24 @@ cli_h2("┗ [SCRIPTS] Loading stats functions")
 ####🔺Summarizing data or a model ####
 #------------------------------------#
 
-distribution_summary <- function(data, dvs, between = "Condition") {
-  data |> select(all_of(between), all_of(dvs)) |> 
+distribution_summary <- function(data, dvs, between = "genotype") {
+  vars <- c("Mean", "Median", "SD", "Variance", "CoV", "IQR", "Min", "Max", "Skewness", "Kurtosis", "n")
+  
+  data |> 
+    select(all_of(between), all_of(dvs)) |> 
     pivot_longer(all_of(dvs), names_to = "DV", values_to = "Value") |> 
     group_by(across(any_of(between)))  |> 
     group_map(
-      \(d, g) datawizard::describe_distribution(group_by(d, DV), centrality = "all", verbose = FALSE) |>
+      function(d, g) datawizard::describe_distribution(group_by(d, DV), centrality = "all", verbose = FALSE) |>
         mutate(
           Variance = SD^2,
           CoV = ifelse(SD / Mean > 1e4, NA_real_, SD / Mean),
           Variable = str_remove(.group, fixed("DV="))
         ) |> 
         add_column(g, .after = 1) |> 
-        select("Variable", all_of(between), "Mean", "Median", "SD", "Variance", "CoV", "IQR", "Min", "Max", "Skewness", "Kurtosis", "n")
+        select("Variable", all_of(between), all_of(vars))
     ) |> 
-    reduce(full_join, by = c("Variable", between, "Mean", "Median", "SD", "Variance", "CoV", "IQR", "Min", "Max", "Skewness", "Kurtosis", "n")) |> 
+    reduce(full_join, by = c("Variable", between, all_of(vars))) |>
     arrange(Variable, across(any_of(between)))
 }
 
@@ -35,9 +38,10 @@ get_model_based_outliers <- function(data, mod, mod_dharma, responses) {
   
   if (nrow(outliers) > 0) {
     outliers <- semi_join(
-        mutate(data, across(everything(), as.character)), 
-        mutate(outliers, across(everything(), as.character))
-    ) |> select(-setdiff(responses, find_response(mod)))
+      mutate(data, across(everything(), as.character)), 
+      mutate(outliers, across(everything(), as.character))
+    ) |> 
+      select(-setdiff(responses, find_response(mod)))
   }
   
   return(outliers)
@@ -50,7 +54,8 @@ get_model_based_outliers <- function(data, mod, mod_dharma, responses) {
 # Should we exponentiate the coefficients of a model (based on its link function)
 should_exp <- \(mod) insight::get_family(mod)$link %in% c("log", "logit")
 
-## Check which (if any) models have any NA as fixed effect coefficients (which signals that the model fitting failed silently)
+## Check which (if any) models have any NA as fixed effect coefficients 
+##  (which signals that the model fitting failed silently)
 has_na_coefs <- function(mods) {
   map_lgl(
     mods,

@@ -23,9 +23,9 @@ color_text_bi <- "#a8aeb4"
 
 #Color-blind friendly palettes
 
-colors_cond <- head(ggpubfigs::friendly_pal("zesty_four"), 2)   # Condition: AD, WT
+colors_genotype <- head(ggpubfigs::friendly_pal("zesty_four"), 2)   # Genotype: AD, WT
 
-my_palettes_d <- list(colors_cond, ggpubfigs::friendly_pal("bright_seven"))
+my_palettes_d <- list(colors_genotype, ggpubfigs::friendly_pal("bright_seven"))
 
 #----------------------#
 ####🔺ggplot themes ####

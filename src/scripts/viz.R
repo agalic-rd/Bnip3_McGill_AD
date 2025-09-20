@@ -41,8 +41,9 @@ corr_matrix_plot <- function(dat, vars, title = "") {
 
 ## Generating a boxplot for an individual gene, showing the main effect of a predictor
 make_signif_boxplot <- function(
-    mod, xaxis = "condition", facet = NULL, cluster = "rat", add_cluster_averages = TRUE, subtitle = NULL, caption = NULL, 
-    scale = "link", adjust = "none", method = "pairwise", resp_name = NULL, max_points = 50, ncol = 2, print_eqs = FALSE
+  mod, xaxis = "genotype", facet = NULL, cluster = "rat", add_cluster_averages = TRUE, 
+  subtitle = NULL, caption = NULL, resp_name = NULL, max_points = 50, ncol = 2,
+  scale = "link", adjust = "none", method = "pairwise", print_eqs = FALSE
 ) {
   
   get_n_units <- function(df) {
@@ -58,8 +59,8 @@ make_signif_boxplot <- function(
   }
   
   if (!is.null(cluster) 
-      && cluster %in% colnames(dat) 
-      && dat |> group_by(across(any_of(c(xaxis, facet, cluster)))) |> count() |> filter(n > 1) |> nrow() == 0
+    && cluster %in% colnames(dat) 
+    && dat |> group_by(across(any_of(c(xaxis, facet, cluster)))) |> count() |> filter(n > 1) |> nrow() == 0
   ) {
     cluster <- NULL
     add_cluster_averages <- FALSE
@@ -92,9 +93,9 @@ make_signif_boxplot <- function(
   emms <- emmeans::emmeans(mod, specs = specs, type = "response", data = insight::get_data(mod))
   if (tolower(scale) %in% c("response", "resp")) emm <- regrid(emm, transform = "response")
   
-  contrasts <- emmeans::contrast(emms, method = method, adjust = adjust, infer = TRUE) |>
+  contrasts <- emmeans::contrast(emms, method = method, adjust = "none", infer = TRUE) |>
     as_tibble() |> 
-    modify_at("p.value", \(x) p.adjust(x, method = "holm")) |>
+    modify_at("p.value", \(x) p.adjust(x, method = adjust)) |>
     rename(Contrast = contrast) |> 
     tidyr::extract(col = Contrast, into = c("X1", "X2"), regex = "(.*) [- | /] (.*)", remove = FALSE)
   
@@ -106,9 +107,9 @@ make_signif_boxplot <- function(
       x2 = match(X2, levels(dat[[xaxis]])),
       p.signif = label_pval(p.value)
     ) 
-    |> arrange(x.diff := abs(x2 - x1))
+    |> arrange(x_diff := abs(x2 - x1))
     |> mutate(
-      step = 1:n(),
+      step = seq_len(n()),
       pos.x = (x2 + x1) * 0.5,
       pos.y = max + step * 0.1 * (max - min)
     ) 
@@ -116,7 +117,7 @@ make_signif_boxplot <- function(
   )
   
   x_title <- str_c(
-    ifelse(xaxis == "condition", "Genotype", stringr::str_to_title(xaxis)), 
+    ifelse(xaxis == "genotype", "Genotype", stringr::str_to_title(xaxis)), 
     ifelse(is.null(facet), "", str_c(" across ", facet))
   )
   
@@ -125,12 +126,15 @@ make_signif_boxplot <- function(
   plot <- (
     ggplot(dat, aes(x = .data[[xaxis]], y = .data[[resp]], color = .data[[xaxis]], fill = .data[[xaxis]]))
     + geom_boxplot(outlier.alpha = 0, size = 1.1, fill = NA)
-    + stat_summary(fun = mean, geom = "errorbar", aes(ymax = after_stat(y), ymin = after_stat(y)), width = 0.75, linewidth = 1.1, linetype = "dotted")
+    + stat_summary(
+      fun = mean, geom = "errorbar", aes(ymax = after_stat(y), ymin = after_stat(y)), 
+      width = 0.75, linewidth = 1.1, linetype = "dotted"
+    )
     + { if (!is.null(cluster)) geom_jitter(
-      data = \(x) x
-        |> group_by(across(any_of(c(xaxis, facet))))
-        |> group_modify(\(d, g) slice_sample(d, n = min(nrow(d), max_points)))
-        |> ungroup(),
+      data = \(x) x |> 
+        group_by(across(any_of(c(xaxis, facet)))) |> 
+        group_modify(\(d, g) slice_sample(d, n = min(nrow(d), max_points))) |>
+        ungroup(),
       mapping = aes(
         x     = .data[[xaxis]],
         y     = .data[[resp]],
@@ -142,11 +146,13 @@ make_signif_boxplot <- function(
       size     = 1.5,
       alpha    = 0.2
     )
-      else geom_jitter(
-        data = \(x) x |> group_by(across(any_of(c(xaxis, facet)))) |> group_modify(\(d, g) slice_sample(d, n = min(nrow(d), max_points))) |> ungroup(), 
-        mapping = aes(fill = .data[[xaxis]]), shape = 23, color = color_text, size = 3, width = 0.1, alpha = 0.9
-      )
-    }
+    else geom_jitter(
+      data = \(x) x |> 
+        group_by(across(any_of(c(xaxis, facet)))) |> 
+        group_modify(\(d, g) slice_sample(d, n = min(nrow(d), max_points))) |> 
+        ungroup(), 
+      mapping = aes(fill = .data[[xaxis]]), shape = 23, color = color_text, size = 3, width = 0.1, alpha = 0.9
+    )}
     + {if (add_cluster_averages) stat_summary(
       aes(group = .data[[cluster]], fill = .data[[xaxis]]), geom = "point", fun = mean, 
       size = ifelse(is.null(facet), 4, 3), shape = 23, color = color_text, alpha = 0.9, position = position_dodge(0.8)
@@ -181,19 +187,23 @@ make_signif_boxplot <- function(
     + {if (!is.null(facet)) facet_wrap(~ .data[[facet]], ncol = ncol)}
   )
 
-    # -----------[ Formatted results ]----------- #
+  # -----------[ Formatted results ]----------- #
   
   if (print_eqs) {
-    contrasts_eqs <- contrasts |> rowwise() |> mutate(
-      contrast_name = pick(everything()) |> colnames() |> str_subset("^estimate|risk|odds|^ratio|^difference"),
-      crit_val_name = pick(everything()) |> colnames() |> str_subset("^(z|t|F)"),
-      Equation = glue::glue(
-        "$<<str_extract({{crit_val_name}}, '^(z|t)')>>(<<df>>) = <<round(.data[[crit_val_name]], 3)>>; " %s+%
-          "p = <<scales::pvalue(p.value)>>; " %s+%
-          "<<str_to_sentence({{contrast_name}})>> = <<round(.data[[contrast_name]], 3)>>; " %s+%
-          "CI_{95} = [<<round(asymp.LCL, 3)>>, <<round(asymp.UCL, 3)>>];$",
-        .open = "<<", .close = ">>"
-      )) |> select(Contrast, any_of(facet), Equation)
+    contrasts_eqs <- contrasts |> 
+      rowwise() |> 
+      mutate(
+        contrast_name = pick(everything()) |> colnames() |> str_subset("^estimate|risk|odds|^ratio|^difference"),
+        crit_val_name = pick(everything()) |> colnames() |> str_subset("^(z|t|F)"),
+        Equation = glue::glue(
+          "$<<str_extract({{crit_val_name}}, '^(z|t)')>>(<<df>>) = <<round(.data[[crit_val_name]], 3)>>; " %s+%
+            "p = <<scales::pvalue(p.value)>>; " %s+%
+            "<<str_to_sentence({{contrast_name}})>> = <<round(.data[[contrast_name]], 3)>>; " %s+%
+            "CI_{95} = [<<round(asymp.LCL, 3)>>, <<round(asymp.UCL, 3)>>];$",
+          .open = "<<", .close = ">>"
+        )
+      ) |> 
+      select(Contrast, any_of(facet), Equation)
     
     print(contrasts_eqs)
   }
@@ -201,10 +211,11 @@ make_signif_boxplot <- function(
   return(plot)
 }
 
-## Generating a boxplot for an individual gene, showing interaction effects between two predictors (using the model fitted to this gene's data as input)
+## Generating a boxplot for an individual gene, showing interaction effects between two predictors 
+##  (using the model fitted to this gene's data as input)
 make_signif_boxplot_inter <- function(
-    mod, pred1 = "condition", pred2, facet = NULL, cluster = NULL, add_cluster_averages = FALSE, stage = NULL,
-    scale = "link", adjust = "none", resp_name = NULL, max_points = 50, ncol = 2, print_eqs = FALSE
+  mod, pred1 = "genotype", pred2, facet = NULL, cluster = NULL, add_cluster_averages = FALSE, stage = NULL,
+  scale = "link", adjust = "none", resp_name = NULL, max_points = 50, ncol = 2, print_eqs = FALSE
 ) {
   
   get_n_units <- function(df) {
@@ -246,86 +257,100 @@ make_signif_boxplot_inter <- function(
   )
   if (tolower(scale) %in% c("response", "resp")) emmeans <- regrid(emmeans, transform = "response")
   
-  contrasts <- emmeans::contrast(emmeans, method = "pairwise", adjust = adjust, infer = TRUE) |> 
+  contrasts <- emmeans::contrast(emmeans, method = "pairwise", adjust = "none", infer = TRUE) |> 
     as.data.frame() |> 
-    modify_at("p.value", \(x) p.adjust(x, method = "holm")) |>
+    modify_at("p.value", \(x) p.adjust(x, method = adjust)) |>
     rename(Contrast = contrast) |> 
     tidyr::extract(col = Contrast, into = c("X1", "X2"), regex = "(.*) [- | /] (.*)", remove = FALSE)
   
   p_data_contrasts <- contrasts |>
     group_by(across(any_of(c(pred2, facet)))) |>
     mutate(
-      x1 = (match(.data[[pred2]], levels(dat[[pred2]])) - 1) * length(unique(dat[[pred1]])) + match(X1, levels(dat[[pred1]])),
-      x2 = (match(.data[[pred2]], levels(dat[[pred2]])) - 1) * length(unique(dat[[pred1]])) + match(X2, levels(dat[[pred1]])),
+      x1 = (match(.data[[pred2]], levels(dat[[pred2]])) - 1) * 
+        length(unique(dat[[pred1]])) + match(X1, levels(dat[[pred1]])),
+      x2 = (match(.data[[pred2]], levels(dat[[pred2]])) - 1) * 
+        length(unique(dat[[pred1]])) + match(X2, levels(dat[[pred1]])),
       p.signif = label_pval(p.value)
     ) |>
-    arrange(x.diff := abs(x2 - x1)) |>
+    arrange(x_diff := abs(x2 - x1)) |>
     mutate(
-      step = 1:n(),
+      step = seq_len(n()),
       pos.x = (x2 + x1) * 0.5,
       pos.y = max + step * 0.1 * (max - min)
     ) |>
     ungroup()
   
-  contrasts_interactions <- emmeans::contrast(emmeans, interaction = c("pairwise"), by = facet, adjust = adjust, infer = TRUE) |> 
+  contrasts_interactions <- emmeans::contrast(
+    emmeans, interaction = c("pairwise"), by = facet, 
+    adjust = "none", infer = TRUE
+  ) |> 
     as.data.frame() |> 
-    modify_at("p.value", \(x) p.adjust(x, method = "holm")) |>
+    modify_at("p.value", \(x) p.adjust(x, method = adjust)) |>
     tidyr::extract(
-        col = paste0(pred1, "_pairwise"), 
-        into = c("pred1_1", "pred1_2"), 
-        regex = "(.*) [- | /] (.*)", 
-        remove = FALSE
+      col = paste0(pred1, "_pairwise"), 
+      into = c("pred1_1", "pred1_2"), 
+      regex = "(.*) [- | /] (.*)", 
+      remove = FALSE
     ) |> 
     tidyr::extract(
-        col = paste0(pred2, "_pairwise"),
-        into = c("pred2_1", "pred2_2"),
-        regex = "(.*) [- | /] (.*)",
-        remove = FALSE
+      col = paste0(pred2, "_pairwise"),
+      into = c("pred2_1", "pred2_2"),
+      regex = "(.*) [- | /] (.*)",
+      remove = FALSE
     )
   
   p_data_interactions <- contrasts_interactions |>
     group_by(across(any_of(c(facet)))) |>
     mutate(
-      x1 = 0.5 * ((match(pred2_1, levels(dat[[pred2]])) - 1) * length(unique(dat[[pred1]])) + match(pred1_1, levels(dat[[pred1]])) +
-                    (match(pred2_1, levels(dat[[pred2]])) - 1) * length(unique(dat[[pred1]])) + match(pred1_2, levels(dat[[pred1]]))),
-      x2 = 0.5 * ((match(pred2_2, levels(dat[[pred2]])) - 1) * length(unique(dat[[pred1]])) + match(pred1_1, levels(dat[[pred1]])) +
-                    (match(pred2_2, levels(dat[[pred2]])) - 1) * length(unique(dat[[pred1]])) + match(pred1_2, levels(dat[[pred1]]))),
+      x1 = 0.5 * (
+        (match(pred2_1, levels(dat[[pred2]])) - 1) * length(unique(dat[[pred1]])) + 
+          match(pred1_1, levels(dat[[pred1]])) +
+          (match(pred2_1, levels(dat[[pred2]])) - 1) * length(unique(dat[[pred1]])) + 
+          match(pred1_2, levels(dat[[pred1]]))
+      ),
+      x2 = 0.5 * (
+        (match(pred2_2, levels(dat[[pred2]])) - 1) * length(unique(dat[[pred1]])) + 
+          match(pred1_1, levels(dat[[pred1]])) +
+          (match(pred2_2, levels(dat[[pred2]])) - 1) * length(unique(dat[[pred1]])) + 
+          match(pred1_2, levels(dat[[pred1]]))
+      ),
       p.signif = label_pval(p.value)
     ) |>
-    arrange(x.diff := abs(x2 - x1)) |>
+    arrange(x_diff := abs(x2 - x1)) |>
     mutate(
-      step = 1:n() + choose(length(unique(dat[[pred1]])), 2),
+      step = seq_len(n()) + choose(length(unique(dat[[pred1]])), 2),
       pos.x = (x2 + x1) * 0.5,
       pos.y = max + step * 0.1 * (max - min)
     ) |>
     ungroup()
   
   x_title <- str_c(
-    ifelse(pred1 == "condition", "Genotype", stringr::str_to_title(pred1)),
+    stringr::str_to_title(pred1),
     " by ",
-    ifelse(pred2 == "location", "area", pred2)
+    stringr::str_to_title(pred2)
   )
 
   if (!is.null(facet)) {
-    x_title <- str_c(
-      x_title,
-      " across ",
-      ifelse(facet == "condition", "genotype", facet)
-    )
+    x_title <- str_c(x_title, " across ", stringr::str_to_title(facet))
   }
   
   # -----------[ Plot ]----------- #
   
   plot <- (
-    ggplot(dat, aes(x = interaction(.data[[pred1]], .data[[pred2]], sep = "_"), y = .data[[resp]], color = .data[[pred1]]))
+    ggplot(
+      dat, aes(x = interaction(.data[[pred1]], .data[[pred2]], sep = "_"), y = .data[[resp]], color = .data[[pred1]])
+    )
     + geom_boxplot(outlier.alpha = 0, size = 1.1, fill = NA)
-    + stat_summary(fun = mean, geom = "errorbar", aes(ymax = after_stat(y), ymin = after_stat(y)), width = 0.75, size = 1.1, linetype = "dotted")
+    + stat_summary(
+      fun = mean, geom = "errorbar", aes(ymax = after_stat(y), ymin = after_stat(y)), 
+      width = 0.75, size = 1.1, linetype = "dotted"
+    )
     + { 
       if (!is.null(cluster)) geom_jitter(
-        data = \(x) x
-          |> group_by(across(any_of(c(pred1, pred2))))
-          |> group_modify(\(d, g) slice_sample(d, n = min(nrow(d), max_points)))
-          |> ungroup(),
+        data = \(x) x |> 
+          group_by(across(any_of(c(pred1, pred2)))) |> 
+          group_modify(\(d, g) slice_sample(d, n = min(nrow(d), max_points))) |> 
+          ungroup(),
         mapping = aes(
           x     = interaction(.data[[pred1]], .data[[pred2]], sep = "_"),
           y     = .data[[resp]],
@@ -338,8 +363,10 @@ make_signif_boxplot_inter <- function(
         alpha    = 0.2
       )
       else geom_jitter(
-        data = \(x) x |> group_by(across(any_of(c(pred1, pred2)))) 
-          |> group_modify(\(d, g) slice_sample(d, n = min(nrow(d), max_points))) |> ungroup(), 
+        data = \(x) x |> 
+          group_by(across(any_of(c(pred1, pred2)))) |> 
+          group_modify(\(d, g) slice_sample(d, n = min(nrow(d), max_points))) |> 
+          ungroup(), 
         mapping = aes(fill = .data[[pred1]]),
         shape = 23, color = color_text, size = 3, width = 0.1, alpha = 0.9
       )
@@ -351,8 +378,9 @@ make_signif_boxplot_inter <- function(
       )
     }
     + geom_errorbarh(
-      data = p_data_contrasts, aes(xmin = paste(X1, .data[[pred2]], sep = "_"), xmax = paste(X2, .data[[pred2]], sep = "_"), y = pos.y), inherit.aes = FALSE,
-      color = "black", height = 0.02 * amp, size = 0.5
+      data = p_data_contrasts, 
+      aes(xmin = paste(X1, .data[[pred2]], sep = "_"), xmax = paste(X2, .data[[pred2]], sep = "_"), y = pos.y), 
+      inherit.aes = FALSE, color = "black", height = 0.02 * amp, size = 0.5
     )
     + geom_text(
       data = p_data_contrasts, aes(x = pos.x, y = pos.y, label = p.signif), inherit.aes = FALSE,
@@ -386,104 +414,49 @@ make_signif_boxplot_inter <- function(
     + labs(y = resp_name, x = x_title)
     + {if (!is.null(stage)) labs(subtitle = str_glue("{stage}"))}
     + {if (!is.null(facet)) facet_wrap(~ .data[[facet]], ncol = ncol)}
-    #+ {if (add_cluster_averages) labs(caption = str_glue("Small round points are individual measurements\n Diamonds represent {cluster}-averages"))}
     + scale_x_discrete(labels = \(l) str_replace(l, "_", "\n"))
   )
 
-    # -----------[ Formatted results ]----------- #
+  # -----------[ Formatted results ]----------- #
   
   if (print_eqs) {
-    contrasts_eqs <- contrasts |> rowwise() |> mutate(
-      contrast_name = pick(everything()) |> colnames() |> str_subset("^estimate|risk|odds|^ratio|^difference"),
-      crit_val_name = pick(everything()) |> colnames() |> str_subset("^(z|t)"),
-      Equation = glue::glue(
-        "$<<str_extract({{crit_val_name}}, '^(z|t)')>>(<<df>>) = <<round(.data[[crit_val_name]], 3)>>; " %s+%
-          "p = <<scales::pvalue(p.value)>>; " %s+%
-          "<<str_to_sentence({{contrast_name}})>> = <<round(.data[[contrast_name]], 3)>>; " %s+%
-          "CI_{95} = [<<round(asymp.LCL, 3)>>, <<round(asymp.UCL, 3)>>];$",
-        .open = "<<", .close = ">>"
-      )) |> select(Contrast, any_of(pred2), Equation)
+    contrasts_eqs <- contrasts |> 
+      rowwise() |> 
+      mutate(
+        contrast_name = pick(everything()) |> colnames() |> str_subset("^estimate|risk|odds|^ratio|^difference"),
+        crit_val_name = pick(everything()) |> colnames() |> str_subset("^(z|t)"),
+        Equation = glue::glue(
+          "$<<str_extract({{crit_val_name}}, '^(z|t)')>>(<<df>>) = <<round(.data[[crit_val_name]], 3)>>; " %s+%
+            "p = <<scales::pvalue(p.value)>>; " %s+%
+            "<<str_to_sentence({{contrast_name}})>> = <<round(.data[[contrast_name]], 3)>>; " %s+%
+            "CI_{95} = [<<round(asymp.LCL, 3)>>, <<round(asymp.UCL, 3)>>];$",
+          .open = "<<", .close = ">>"
+        )
+      ) |> 
+      select(Contrast, any_of(pred2), Equation)
     
     print(contrasts_eqs)
     
-    contrasts_interactions_eqs <- contrasts_interactions |> rowwise() |> mutate(
-      contrast_name = pick(everything()) |> colnames() |> str_subset("^estimate|risk|odds|^ratio|^difference"),
-      crit_val_name = pick(everything()) |> colnames() |> str_subset("^(z|t)"),
-      Equation = glue::glue(
-        "$<<str_extract({{crit_val_name}}, '^(z|t)')>>(<<df>>) = <<round(.data[[crit_val_name]], 3)>>; " %s+%
-          "p = <<scales::pvalue(p.value)>>; " %s+%
-          "<<str_to_sentence({{contrast_name}})>> = <<round(.data[[contrast_name]], 3)>>; " %s+%
-          "CI_{95} = [<<round(asymp.LCL, 3)>>, <<round(asymp.UCL, 3)>>];$",
-        .open = "<<", .close = ">>"
-      )) |> select(matches("_pairwise"), Equation)
+    contrasts_interactions_eqs <- contrasts_interactions |> 
+      rowwise() |> 
+      mutate(
+        contrast_name = pick(everything()) |> colnames() |> str_subset("^estimate|risk|odds|^ratio|^difference"),
+        crit_val_name = pick(everything()) |> colnames() |> str_subset("^(z|t)"),
+        Equation = glue::glue(
+          "$<<str_extract({{crit_val_name}}, '^(z|t)')>>(<<df>>) = <<round(.data[[crit_val_name]], 3)>>; " %s+%
+            "p = <<scales::pvalue(p.value)>>; " %s+%
+            "<<str_to_sentence({{contrast_name}})>> = <<round(.data[[contrast_name]], 3)>>; " %s+%
+            "CI_{95} = [<<round(asymp.LCL, 3)>>, <<round(asymp.UCL, 3)>>];$",
+          .open = "<<", .close = ">>"
+        )
+      ) |> 
+      select(matches("_pairwise"), Equation)
     
     print(contrasts_interactions_eqs)
   }
   
   return(plot)
 }
-
-#------------------#
-####🔺Timelines ####
-#------------------#
-
-make_fold_timeline_plot <- function(
-    dat, facet_rows = "Pathway", trans = "identity", 
-    color_by = NULL, colors = colors_effect, size_boost = 1
-) {
-  
-  origin <- do.call(trans, list(1))
-  
-  dat <- (
-    dat
-    |> mutate(fold_trans = do.call(trans, list(fold)))
-    |> mutate(fold_amp = ifelse(
-      max(fold_trans, na.rm = TRUE) - min(fold_trans, na.rm = TRUE) != 0, 
-      max(fold_trans, na.rm = TRUE) - min(fold_trans, na.rm = TRUE), 
-      mean(fold_trans, na.rm = TRUE)) * 0.1,
-      .by = all_of(c(facet_rows, "stage"))
-    )
-  )
-  
-  timeline <- (
-    ggplot(dat)
-    + { if (is.null(color_by)) aes(x = gene, color = fold >= 1) else aes(x = gene, color = .data[[color_by]]) }
-    + geom_linerange(aes(ymax = fold_trans), ymin = origin, linewidth = 2 + (size_boost * 0.5))
-    + geom_hline(yintercept = origin, linewidth = 0.3, linetype = "dotted")
-    + geom_text(aes(
-        label = str_c(round(fold, 2), stars_pval(p_value), sep = " "), 
-        y = ifelse(fold_trans > origin, fold_trans + fold_amp, fold_trans - fold_amp),
-        hjust = ifelse(fold > 1, 0, 1)
-      ),
-      vjust = 0.5, angle = 0, size = 2 + (size_boost * 0.25), check_overlap = TRUE
-    )
-    + scale_color_manual(" ", values = colors)
-    + scale_y_continuous(breaks = c(0,1,2,3), expand = expansion(mult = 1.01 * (1 + (size_boost/100))))
-    + scale_x_discrete(expand = expansion(add = 1 * size_boost), limits = \(x) rev(x))
-    + labs(
-      x = "",
-      y = ifelse(trans != "identity", str_glue("Fold Change *({trans} scale)*"), "Fold Change")
-    )
-    + coord_flip()
-    + facet_grid(
-      vars(.data[[facet_rows]]), vars(stage), 
-      scales = "free_y", space = "free_y", labeller = label_wrap_gen(width = 12, multi_line = TRUE)
-    )
-    + { if (!is.null(color_by)) guides(color = guide_legend(title = color_by)) }
-    + theme(
-      legend.position = ifelse(is.null(color_by), "none", "bottom")
-      , axis.text.x = element_blank()
-      , axis.title.x = element_markdown(size = 9)
-      , axis.text.y = element_text(size = 7)
-      , strip.text = element_text(size = 5 * size_boost)
-      , plot.title = element_markdown(size = 9, face = "plain", vjust = 1, hjust = 0.5)
-    )
-  )
-  
-  return(timeline)
-}
-
-
 
 #--------------------------#
 ####🔺Model diagnostics ####
@@ -503,9 +476,9 @@ make_acf_plot <- function(mod) {
     )
 }
 
-ppc_plots <- function(mod, simulations, term = "condition", type = "fixed", is_count = NULL, max_cols_per_plot = 3) {
+ppc_plots <- function(mod, simulations, term = "genotype", type = "fixed", is_count = NULL, max_cols_per_plot = 3) {
   
-  Y <- insight::get_response(mod)
+  y_obs <- insight::get_response(mod)
   n_unique <- n_distinct(insight::get_data(mod)[[term]])
   
   if (is.null(is_count)) is_count <- ifelse(insight::get_family(mod)$family |> str_detect("binom|poiss"), TRUE, FALSE)
@@ -517,40 +490,41 @@ ppc_plots <- function(mod, simulations, term = "condition", type = "fixed", is_c
   if (type %in% c("fixed", "fe")) {
     .term <- insight::get_predictors(mod)[[term]]
     
-    # ppc_global <- ppc_fun(y = Y, yrep = simulations) 
-    if (is_count) ppc_root <- bayesplot::ppc_rootogram(Y, simulations, style = "suspended")
+    # ppc_global <- ppc_fun(y = y_obs, yrep = simulations) 
+    if (is_count) ppc_root <- bayesplot::ppc_rootogram(y_obs, simulations, style = "suspended")
     
-    ppc_grouped <- ppc_fun_grouped(Y, simulations, group = .term) + 
+    ppc_grouped <- ppc_fun_grouped(y_obs, simulations, group = .term) + 
       facet_wrap(~ group, ncol = min(max_cols_per_plot, n_unique), scales = "free")
-    ppc_pred_grouped <- ppc_fun_pred_grouped(Y, simulations, group = .term, prob_outer = 0.95) + 
+    ppc_pred_grouped <- ppc_fun_pred_grouped(y_obs, simulations, group = .term, prob_outer = 0.95) + 
       facet_wrap(~ group, ncol = min(max_cols_per_plot, n_unique), scales = "free")
   }
   else if (type %in% c("random", "re")) {
     .term <- insight::get_random(mod)[[term]]
     
-    ppc_grouped <- ppc_fun_grouped(Y, simulations, group = .term) + 
+    ppc_grouped <- ppc_fun_grouped(y_obs, simulations, group = .term) + 
       facet_wrap(~ group, ncol = min(max_cols_per_plot, n_unique), scales = "free")
-    ppc_pred_grouped <- ppc_fun_pred_grouped(Y, simulations, group = .term, prob_outer = 0.95) + 
+    ppc_pred_grouped <- ppc_fun_pred_grouped(y_obs, simulations, group = .term, prob_outer = 0.95) + 
       facet_wrap(~ group, ncol = min(max_cols_per_plot, n_unique), scales = "free")
   }
   
   return(
     if (type %in% c("fixed", "fe")) {
       if (is_count) { 
-        (ppc_root / ppc_grouped / ppc_pred_grouped) + plot_layout(guides = 'collect', ncol = 1, nrow = 3) +
-          # plot_annotation(title = "Simulation-based Posterior Predictive Checks", subtitle = str_glue("For [{term}]")) & 
-          theme(legend.position = 'right', axis.title.x = element_blank())
+        (ppc_root / ppc_grouped / ppc_pred_grouped) + plot_layout(guides = "collect", ncol = 1, nrow = 3) +
+          theme(legend.position = "right", axis.title.x = element_blank())
       } else {
-        (ppc_grouped / (ppc_pred_grouped + theme(axis.title.x = element_blank()))) + plot_layout(ncol = 1, nrow = 2) + 
-          # plot_annotation(title = "Simulation-based Posterior Predictive Checks", subtitle = str_glue("For [{term}]")) & 
-          theme(legend.position = 'right')
+        (ppc_grouped / (ppc_pred_grouped + theme(axis.title.x = element_blank()))) + plot_layout(ncol = 1, nrow = 2) +
+          theme(legend.position = "right")
       }
     }
     else list(ppc_grouped, ppc_pred_grouped)
   )
 }
 
-ppc_stat_plots <- function(mod, simulations, term = "condition", type = "fixed", stats = c("min", "max", "mean", "sd"), n_cols = 2, max_cols_per_plot = 5) {
+ppc_stat_plots <- function(
+  mod, simulations, term = "genotype", type = "fixed", 
+  stats = c("min", "max", "mean", "sd"), n_cols = 2, max_cols_per_plot = 5
+) {
   
   n_unique <- n_distinct(insight::get_data(mod)[[term]])
   
@@ -567,9 +541,8 @@ ppc_stat_plots <- function(mod, simulations, term = "condition", type = "fixed",
           facet_args = list(ncol = min(max_cols_per_plot, n_unique))
         ) + scale_x_continuous(labels = \(l) signif(l, digits = 2))
       ), 
-      ncol = n_cols, guides = 'auto'
-    ) + 
-      # plot_annotation(title = "Simulation-based Predictive Checks (on statistics)", subtitle = str_glue("For [{term}]")) & 
-      theme(legend.position = 'right', axis.text.x = element_text(size = rel(1.5), angle = 30, hjust = 1))
+      ncol = n_cols, guides = "auto"
+    ) +
+      theme(legend.position = "right", axis.text.x = element_text(size = rel(1.5), angle = 30, hjust = 1))
   )
 }

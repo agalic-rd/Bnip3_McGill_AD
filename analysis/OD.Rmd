@@ -8,7 +8,7 @@ source(here::here("src", "setup.R"), echo = FALSE)
 ***
 
 ```{r}
-(optical_density <- load_od_data())
+(od_data <- load_od_data())
 ```
 
 <!----------------------------------------------------------------------------->
@@ -20,17 +20,17 @@ source(here::here("src", "setup.R"), echo = FALSE)
 ## 1. Models
 
 ```{r}
-mod_od_gamma_tot <- glmmTMB::glmmTMB(
-  od_corrected ~ condition * age * location + (1 | rat / section),
+mod_soma <- glmmTMB::glmmTMB(
+  od_corrected ~ genotype * age * area + (1 | rat / section),
   family = Gamma("log"),
-  data = optical_density$soma,
+  data = od_data$soma,
   REML = TRUE
 )
 
 cli_h1("[Parameters]")
-parameters(mod_od_gamma_tot)
+parameters(mod_soma)
 cli_h1("[Fitness]")
-performance(mod_od_gamma_tot)
+performance(mod_soma)
 ```
 
 <!----------------------------------------------------------------------------->
@@ -39,30 +39,41 @@ performance(mod_od_gamma_tot)
 ### Residual diagnostics
 
 ```{r fig.width = 10}
-# check_model(mod_od_gamma_tot) # Very slow
+# Very slow
+plot(check_model(mod_soma, check = c("qq", "normality", "linearity", "reqq", "pp_check", "vif"))) # -> mod_soma_diag
+
+# ggsave(plot = mod_od_diag, filename = "mod_soma_diag.png", width = 16, height = 9)
 ```
 
 ### Predictive checks
 
 ```{r}
-mod_od_gamma_tot_dharma <- DHARMa::simulateResiduals(mod_od_gamma_tot, plot = FALSE, n = 300, seed = getOption("seed"))
-mod_od_gamma_tot_dharma_t <- t(mod_od_gamma_tot_dharma$simulatedResponse)
+mod_soma_dharma <- DHARMa::simulateResiduals(mod_soma, plot = FALSE, n = 300, seed = getOption("seed"))
+mod_soma_dharma_t <- t(mod_soma_dharma$simulatedResponse)
+```
+
+```{r}
+# png("mod_soma_dharma_residuals.png", width = 16, height = 9, units = "in", res = 600)
+plot(mod_soma_dharma, asFactor = TRUE)
+# dev.off()
 ```
 
 ```{r fig.width = 10}
-ppc_plots(mod_od_gamma_tot, simulations = mod_od_gamma_tot_dharma_t, term = "condition")
-ppc_plots(mod_od_gamma_tot, simulations = mod_od_gamma_tot_dharma_t, term = "age")
+ppc_plots(mod_soma, simulations = mod_soma_dharma_t, term = "genotype")
+ppc_plots(mod_soma, simulations = mod_soma_dharma_t, term = "age")
+ppc_plots(mod_soma, simulations = mod_soma_dharma_t, term = "area")
 ```
 
 ```{r fig.width = 10}
-ppc_stat_plots(mod_od_gamma_tot, simulations = mod_od_gamma_tot_dharma_t, term = "condition")
-ppc_stat_plots(mod_od_gamma_tot, simulations = mod_od_gamma_tot_dharma_t, term = "age")
+ppc_stat_plots(mod_soma, simulations = mod_soma_dharma_t, term = "genotype")
+ppc_stat_plots(mod_soma, simulations = mod_soma_dharma_t, term = "age")
+ppc_stat_plots(mod_soma, simulations = mod_soma_dharma_t, term = "area")
 ```
 
 ### Potential outliers
 
 ```{r}
-get_model_based_outliers(optical_density$soma, mod_od_gamma_tot, mod_od_gamma_tot_dharma, "od_corrected")
+get_model_based_outliers(od_data$soma, mod_soma, mod_soma_dharma, "od_corrected")
 ```
 
 <!----------------------------------------------------------------------------->
@@ -78,7 +89,7 @@ p_adjust <- "holm"
 
 ```{r}
 parameters(
-  mod_od_gamma_tot, exponentiate = should_exp(mod_od_gamma_tot),
+  mod_soma, exponentiate = should_exp(mod_soma),
   ci_method = "Wald", p_adjust = p_adjust, summary = TRUE, digits = 3
 )
 ```
@@ -86,21 +97,21 @@ parameters(
 **Main effects (Wald):**
 
 ```{r}
-car::Anova(mod_od_gamma_tot, type = 3)
+car::Anova(mod_soma, type = 3)
 ```
 
 ### Marginal means
 
-**Condition**
+**Genotype**
 
 ```{r}
 cli_h1("[Observed]")
 
-distribution_summary(get_data(mod_od_gamma_tot), dvs = find_response(mod_od_gamma_tot), between = "condition")
+distribution_summary(get_data(mod_soma), dvs = find_response(mod_soma), between = "genotype")
 
 cli_h1("[Emmeans]")
 
-emmeans(mod_od_gamma_tot, specs = "condition", regrid = "response")
+emmeans(mod_soma, specs = "genotype", regrid = "response")
 ```
 
 **Age**
@@ -108,84 +119,178 @@ emmeans(mod_od_gamma_tot, specs = "condition", regrid = "response")
 ```{r}
 cli_h1("[Observed]")
 
-distribution_summary(get_data(mod_od_gamma_tot), dvs = find_response(mod_od_gamma_tot), between = "age")
+distribution_summary(get_data(mod_soma), dvs = find_response(mod_soma), between = "age")
 
 cli_h1("[Emmeans]")
 
-emmeans(mod_od_gamma_tot, specs = "age", regrid = "response")
+emmeans(mod_soma, specs = "age", regrid = "response")
 ```
 
-**Condition:Age**
+**Genotype:Age**
 
 ```{r}
 cli_h1("[Observed]")
 
-distribution_summary(get_data(mod_od_gamma_tot), dvs = find_response(mod_od_gamma_tot), between = c("condition", "age"))
+distribution_summary(get_data(mod_soma), dvs = find_response(mod_soma), between = c("genotype", "age"))
 
 cli_h1("[Emmeans]")
 
-emmeans(mod_od_gamma_tot, specs = ~ condition | age, regrid = "response")
+emmeans(mod_soma, specs = ~ genotype | age, regrid = "response")
 ```
 
 ### Contrasts
 
-**Condition**
+**Genotype**
 
 ```{r}
-emmeans(mod_od_gamma_tot, specs = "condition", type = "response") |> 
+emmeans(mod_soma, specs = "genotype", type = "response") |> 
   contrast(method = "pairwise", adjust = p_adjust, infer = TRUE)
 ```
 
 ```{r fig.width = 4, fig.height = 7}
-make_signif_boxplot(mod_od_gamma_tot, xaxis = "condition")
+make_signif_boxplot(mod_soma, xaxis = "genotype") |> 
+  save_png("mod_soma_genotype", width = 4, height = 7)
 ```
 
 **Age**
 
 ```{r}
-emmeans(mod_od_gamma_tot, specs = "age", type = "response") |> 
+emmeans(mod_soma, specs = "age", type = "response") |> 
   contrast(method = "pairwise", adjust = p_adjust, infer = TRUE)
 ```
 
 ```{r fig.width = 4, fig.height = 7}
-make_signif_boxplot(mod_od_gamma_tot, xaxis = "age", adjust = p_adjust)
+make_signif_boxplot(mod_soma, xaxis = "age", adjust = p_adjust)
 ```
 
-**Condition:Age**
+**Genotype:Age**
+
+Genotype within Age:
 
 ```{r}
-emmeans(mod_od_gamma_tot, specs = ~ condition | age, type = "response") |> 
-  contrast(method = "pairwise", adjust = "none", infer = TRUE) |> 
-  as.data.frame() |> 
-  modify_at("p.value", \(x) p.adjust(x, method = "holm"))
-
-cli_h2("[Interaction]")
-
-emmeans(mod_od_gamma_tot, specs = ~ condition | age, type = "response") |>
-  contrast(interaction = "pairwise", by = NULL, adjust = "none", infer = TRUE) |> 
-  as.data.frame() |> 
-  modify_at("p.value", \(x) p.adjust(x, method = "holm"))
+emmeans(mod_soma, specs = ~ genotype | age, type = "response") |>
+  contrast(method = "pairwise", adjust = "none", infer = TRUE) |>
+  as.data.frame() |>
+  modify_at("p.value", \(x) p.adjust(x, method = p_adjust))
 ```
 
 ```{r fig.width = 14, fig.height = 6}
-make_signif_boxplot(mod_od_gamma_tot, xaxis = "condition", facet = "age", ncol = 4, max_points = Inf, adjust = p_adjust) |> 
-  save_png("mod_od_gamma_tot", width = 14, height = 7, display = TRUE)
+make_signif_boxplot(mod_soma, xaxis = "genotype", facet = "age", ncol = 4, max_points = Inf, adjust = p_adjust) |>
+  save_png("mod_soma_genotype_age", width = 14, height = 7, display = TRUE)
+```
+
+Age within Genotype:
+
+```{r}
+emmeans(mod_soma, specs = ~ age | genotype, type = "response") |>
+  contrast(method = "pairwise", adjust = "none", infer = TRUE) |>
+  as.data.frame() |>
+  modify_at("p.value", \(x) p.adjust(x, method = p_adjust))
+```
+
+```{r fig.width = 14, fig.height = 6}
+make_signif_boxplot(mod_soma, xaxis = "age", facet = "genotype", ncol = 4, max_points = Inf, adjust = p_adjust) |> 
+  save_png("mod_soma_age_genotype", width = 14, height = 7, display = TRUE)
+```
+
+Difference in Genotype's effect between Ages:
+
+```{r}
+emmeans(mod_soma, specs = ~ genotype | age, type = "response") |>
+  contrast(interaction = "pairwise", by = NULL, adjust = "none", infer = TRUE) |> 
+  as.data.frame() |> 
+  modify_at("p.value", \(x) p.adjust(x, method = p_adjust))
 ```
 
 ```{r fig.height = 6, fig.width = 14}
 make_signif_boxplot_inter(
-  mod_od_gamma_tot, pred1 = "condition", pred2 = "location", facet = "age", 
+  mod_soma, pred1 = "genotype", pred2 = "age", facet = NULL, 
   cluster = "rat", add_cluster_averages = TRUE, ncol = 5, max_points = Inf, adjust = p_adjust
 ) |> 
-  save_png("mod_od_gamma_inter", width = 14, height = 7)
+  save_png("mod_soma_genotype_age_inter", width = 14, height = 7)
+```
+
+**Genotype:Area**
+
+Genotype within Area:
+
+```{r}
+emmeans(mod_soma, specs = ~ genotype | area, type = "response") |>
+  contrast(method = "pairwise", adjust = "none", infer = TRUE) |>
+  as.data.frame() |>
+  modify_at("p.value", \(x) p.adjust(x, method = p_adjust))
+```
+
+```{r fig.width = 14, fig.height = 6}
+make_signif_boxplot(mod_soma, xaxis = "genotype", facet = "area", ncol = 4, max_points = Inf, adjust = p_adjust) |>
+  save_png("mod_soma_genotype_area", width = 14, height = 7, display = TRUE)
+```
+
+Area within Genotype:
+
+```{r}
+emmeans(mod_soma, specs = ~ area | genotype, type = "response") |>
+  contrast(method = "pairwise", adjust = "none", infer = TRUE) |>
+  as.data.frame() |>
+  modify_at("p.value", \(x) p.adjust(x, method = p_adjust))
+```
+
+```{r fig.width = 14, fig.height = 6}
+make_signif_boxplot(mod_soma, xaxis = "area", facet = "genotype", ncol = 4, max_points = Inf, adjust = p_adjust) |>
+  save_png("mod_soma_area_genotype", width = 14, height = 7, display = TRUE)
+```
+
+Difference in Genotype's effect between Areas:
+
+```{r}
+emmeans(mod_soma, specs = ~ genotype | area, type = "response") |>
+  contrast(interaction = "pairwise", by = NULL, adjust = "none", infer = TRUE) |> 
+  as.data.frame() |> 
+  modify_at("p.value", \(x) p.adjust(x, method = p_adjust))
 ```
 
 ```{r fig.height = 6, fig.width = 14}
 make_signif_boxplot_inter(
-  mod_od_gamma_tot, pred1 = "age", pred2 = "location", facet = "condition", 
+  mod_soma, pred1 = "genotype", pred2 = "area", facet = NULL, 
   cluster = "rat", add_cluster_averages = TRUE, ncol = 5, max_points = Inf, adjust = p_adjust
 ) |> 
-  save_png("mod_od_gamma_inter_age", width = 14, height = 7)
+  save_png("mod_soma_genotype_area_inter", width = 14, height = 7)
+```
+
+**Genotype:Age:Area**
+
+Difference in Genotype's effect between Areas within Ages:
+
+```{r}
+emmeans(mod_soma, specs = ~ genotype * area | age, type = "response") |>
+  contrast(interaction = "pairwise", by = "age", adjust = "none", infer = TRUE) |> 
+  as.data.frame() |> 
+  modify_at("p.value", \(x) p.adjust(x, method = p_adjust))
+```
+
+```{r fig.height = 6, fig.width = 14}
+make_signif_boxplot_inter(
+  mod_soma, pred1 = "genotype", pred2 = "area", facet = "age", 
+  cluster = "rat", add_cluster_averages = TRUE, ncol = 5, max_points = Inf, adjust = p_adjust
+) |> 
+  save_png("mod_soma_genotype_area_inter_age", width = 14, height = 7)
+```
+
+Difference in Age's effect between Areas within Genotype:
+
+```{r}
+emmeans(mod_soma, specs = ~ age * area | genotype, type = "response") |>
+  contrast(interaction = "pairwise", by = "genotype", adjust = "none", infer = TRUE) |> 
+  as.data.frame() |> 
+  modify_at("p.value", \(x) p.adjust(x, method = p_adjust))
+```
+
+```{r fig.height = 6, fig.width = 14}
+make_signif_boxplot_inter(
+  mod_soma, pred1 = "age", pred2 = "area", facet = "genotype", 
+  cluster = "rat", add_cluster_averages = TRUE, ncol = 5, max_points = Inf, adjust = p_adjust
+) |> 
+  save_png("mod_soma_age_area_inter_genotype", width = 14, height = 7)
 ```
 
 
@@ -198,17 +303,17 @@ make_signif_boxplot_inter(
 ## 1. Models
 
 ```{r}
-mod_od_gamma_pooled <- glmmTMB::glmmTMB(
-  od_corrected ~ condition + (1 | rat / section),
+mod_soma_pooled <- glmmTMB::glmmTMB(
+  od_corrected ~ genotype + (1 | rat / section),
   family = Gamma("log"),
-  data = optical_density$soma,
+  data = od_data$soma,
   REML = TRUE
 )
 
 cli_h1("[Parameters]")
-parameters(mod_od_gamma_pooled)
+parameters(mod_soma_pooled)
 cli_h1("[Fitness]")
-performance(mod_od_gamma_pooled)
+performance(mod_soma_pooled)
 ```
 
 <!----------------------------------------------------------------------------->
@@ -217,28 +322,33 @@ performance(mod_od_gamma_pooled)
 ### Residual diagnostics
 
 ```{r fig.width = 10}
-# check_model(mod_od_gamma_pooled) # Slow
+# Slow
+check_model(mod_soma_pooled, check = c("qq", "normality", "linearity", "ncv", "reqq", "pp_check", "vif"))
 ```
 
 ### Predictive checks
 
 ```{r}
-mod_od_gamma_pooled_dharma <- DHARMa::simulateResiduals(mod_od_gamma_pooled, plot = FALSE, n = 300, seed = getOption("seed"))
-mod_od_gamma_pooled_dharma_t <- t(mod_od_gamma_pooled_dharma$simulatedResponse)
+mod_soma_pooled_dharma <- DHARMa::simulateResiduals(mod_soma_pooled, plot = FALSE, n = 300, seed = getOption("seed"))
+mod_soma_pooled_dharma_t <- t(mod_soma_pooled_dharma$simulatedResponse)
+```
+
+```{r}
+plot(mod_soma_pooled_dharma)
 ```
 
 ```{r fig.width = 10}
-ppc_plots(mod_od_gamma_pooled, simulations = mod_od_gamma_pooled_dharma_t, term = "condition")
+ppc_plots(mod_soma_pooled, simulations = mod_soma_pooled_dharma_t, term = "genotype")
 ```
 
 ```{r fig.width = 10}
-ppc_stat_plots(mod_od_gamma_pooled, simulations = mod_od_gamma_pooled_dharma_t, term = "condition")
+ppc_stat_plots(mod_soma_pooled, simulations = mod_soma_pooled_dharma_t, term = "genotype")
 ```
 
 ### Potential outliers
 
 ```{r}
-get_model_based_outliers(optical_density$soma, mod_od_gamma_pooled, mod_od_gamma_pooled_dharma, "od_corrected")
+get_model_based_outliers(od_data$soma, mod_soma_pooled, mod_soma_pooled_dharma, "od_corrected")
 ```
 
 <!----------------------------------------------------------------------------->
@@ -250,7 +360,7 @@ get_model_based_outliers(optical_density$soma, mod_od_gamma_pooled, mod_od_gamma
 
 ```{r}
 parameters(
-  mod_od_gamma_pooled, exponentiate = should_exp(mod_od_gamma_pooled),
+  mod_soma_pooled, exponentiate = should_exp(mod_soma_pooled),
   ci_method = "Wald", p_adjust = "none", summary = TRUE, digits = 3
 )
 ```
@@ -258,7 +368,7 @@ parameters(
 **Main effects (Wald):**
 
 ```{r}
-car::Anova(mod_od_gamma_pooled, type = 3)
+car::Anova(mod_soma_pooled, type = 3)
 ```
 
 ### Marginal means
@@ -266,23 +376,23 @@ car::Anova(mod_od_gamma_pooled, type = 3)
 ```{r}
 cli_h1("[Observed]")
 
-distribution_summary(get_data(mod_od_gamma_pooled), dvs = find_response(mod_od_gamma_pooled), between = "condition")
+distribution_summary(get_data(mod_soma_pooled), dvs = find_response(mod_soma_pooled), between = "genotype")
 
 cli_h1("[Emmeans]")
 
-emmeans(mod_od_gamma_pooled, specs = "condition", regrid = "response")
+emmeans(mod_soma_pooled, specs = "genotype", regrid = "response")
 ```
 
 ### Contrasts
 
 ```{r}
-emmeans(mod_od_gamma_pooled, specs = "condition", type = "response") |> 
+emmeans(mod_soma_pooled, specs = "genotype", type = "response") |> 
   contrast(method = "pairwise", adjust = "none", infer = TRUE)
 ```
 
 ```{r fig.width = 6, fig.height = 7}
-make_signif_boxplot(mod_od_gamma_pooled, xaxis = "condition", max_points = Inf) |> 
-  save_png("mod_od_gamma_pooled", width = 6, height = 7, display = TRUE)
+make_signif_boxplot(mod_soma_pooled, xaxis = "genotype", max_points = Inf) |> 
+  save_png("mod_soma_pooled_genotype", width = 6, height = 7, display = TRUE)
 ```
 
 
@@ -295,17 +405,17 @@ make_signif_boxplot(mod_od_gamma_pooled, xaxis = "condition", max_points = Inf) 
 ## 1. Models
 
 ```{r}
-mod_bnip3_gamma <- glmmTMB(
-  od_corrected ~ condition * age + (1 | rat),
+mod_ml <- glmmTMB(
+  od_corrected ~ genotype * age + (1 | rat),
   family = Gamma("log"),
-  data = optical_density$ml,
+  data = od_data$ml,
   REML = TRUE
 )
 
 cli_h1("[Parameters]")
-parameters(mod_bnip3_gamma)
+parameters(mod_ml)
 cli_h1("[Fitness]")
-performance(mod_bnip3_gamma)
+performance(mod_ml)
 ```
 
 <!----------------------------------------------------------------------------->
@@ -314,32 +424,40 @@ performance(mod_bnip3_gamma)
 ### Residual diagnostics
 
 ```{r fig.width = 10}
-check_model(mod_bnip3_gamma)
+plot(check_model(mod_ml, check = c("qq", "normality", "linearity", "reqq", "pp_check", "vif"))) # -> mod_ml_diag
 
-make_acf_plot(mod_bnip3_gamma)
+# ggsave("mod_ml_diag.png", mod_ml_diag, width = 16, height = 9)
+
+make_acf_plot(mod_ml)
 ```
 
 ### Predictive checks
 
 ```{r}
-mod_bnip3_gamma_dharma <- DHARMa::simulateResiduals(mod_bnip3_gamma, plot = FALSE, n = 300, seed = getOption("seed"))
-mod_bnip3_gamma_dharma_t <- t(mod_bnip3_gamma_dharma$simulatedResponse)
+mod_ml_dharma <- DHARMa::simulateResiduals(mod_ml, plot = FALSE, n = 300, seed = getOption("seed"))
+mod_ml_dharma_t <- t(mod_ml_dharma$simulatedResponse)
 ```
 
 ```{r fig.width = 10}
-ppc_plots(mod_bnip3_gamma, simulations = mod_bnip3_gamma_dharma_t, term = "condition")
-ppc_plots(mod_bnip3_gamma, simulations = mod_bnip3_gamma_dharma_t, term = "age")
+# png("mod_ml_dharma_residuals.png", width = 16, height = 9, units = "in", res = 600)
+plot(mod_ml_dharma)
+# dev.off()
 ```
 
 ```{r fig.width = 10}
-ppc_stat_plots(mod_bnip3_gamma, simulations = mod_bnip3_gamma_dharma_t, term = "condition")
-ppc_stat_plots(mod_bnip3_gamma, simulations = mod_bnip3_gamma_dharma_t, term = "age")
+ppc_plots(mod_ml, simulations = mod_ml_dharma_t, term = "genotype")
+ppc_plots(mod_ml, simulations = mod_ml_dharma_t, term = "age")
+```
+
+```{r fig.width = 10}
+ppc_stat_plots(mod_ml, simulations = mod_ml_dharma_t, term = "genotype")
+ppc_stat_plots(mod_ml, simulations = mod_ml_dharma_t, term = "age")
 ```
 
 ### Potential outliers
 
 ```{r}
-get_model_based_outliers(optical_density$ml, mod_bnip3_gamma, mod_bnip3_gamma_dharma, "od_corrected")
+get_model_based_outliers(od_data$ml, mod_ml, mod_ml_dharma, "od_corrected")
 ```
 
 <!----------------------------------------------------------------------------->
@@ -355,7 +473,7 @@ p_adjust <- "holm"
 
 ```{r}
 parameters(
-  mod_bnip3_gamma, exponentiate = should_exp(mod_bnip3_gamma),
+  mod_ml, exponentiate = should_exp(mod_ml),
   ci_method = "Wald", p_adjust = p_adjust, summary = TRUE, digits = 3
 )
 ```
@@ -363,21 +481,21 @@ parameters(
 **Main effects (Wald):**
 
 ```{r}
-car::Anova(mod_bnip3_gamma, type = 3)
+car::Anova(mod_ml, type = 3)
 ```
 
 ### Marginal means
 
-**Condition**
+**Genotype**
 
 ```{r}
 cli_h1("[Observed]")
 
-distribution_summary(get_data(mod_bnip3_gamma), dvs = find_response(mod_bnip3_gamma), between = "condition")
+distribution_summary(get_data(mod_ml), dvs = find_response(mod_ml), between = "genotype")
 
 cli_h1("[Emmeans]")
 
-emmeans(mod_bnip3_gamma, specs = "condition", regrid = "response")
+emmeans(mod_ml, specs = "genotype", regrid = "response")
 ```
 
 **Age**
@@ -385,79 +503,93 @@ emmeans(mod_bnip3_gamma, specs = "condition", regrid = "response")
 ```{r}
 cli_h1("[Observed]")
 
-distribution_summary(get_data(mod_bnip3_gamma), dvs = find_response(mod_bnip3_gamma), between = "age")
+distribution_summary(get_data(mod_ml), dvs = find_response(mod_ml), between = "age")
 
 cli_h1("[Emmeans]")
 
-emmeans(mod_bnip3_gamma, specs = "age", regrid = "response")
+emmeans(mod_ml, specs = "age", regrid = "response")
 ```
 
-**Condition:Age**
+**Genotype:Age**
 
 ```{r}
 cli_h1("[Observed]")
 
-distribution_summary(get_data(mod_bnip3_gamma), dvs = find_response(mod_bnip3_gamma), between = c("condition", "age"))
+distribution_summary(get_data(mod_ml), dvs = find_response(mod_ml), between = c("genotype", "age"))
 
 cli_h1("[Emmeans]")
 
-emmeans(mod_bnip3_gamma, specs = ~ condition | age, regrid = "response")
+emmeans(mod_ml, specs = ~ genotype | age, regrid = "response")
 ```
 
 ### Contrasts
 
-**Condition**
+**Genotype**
 
 ```{r}
-emmeans(mod_bnip3_gamma, specs = "condition", type = "response") |> 
+emmeans(mod_ml, specs = "genotype", type = "response") |> 
   contrast(method = "pairwise", adjust = p_adjust, infer = TRUE)
 ```
 
 ```{r fig.width = 4, fig.height = 7}
-make_signif_boxplot(mod_bnip3_gamma, xaxis = "condition")
+make_signif_boxplot(mod_ml, xaxis = "genotype") |> 
+  save_png("mod_ml_genotype", width = 4, height = 7, display = TRUE)
 ```
 
 **Age**
 
 ```{r}
-emmeans(mod_bnip3_gamma, specs = "age", type = "response") |> 
+emmeans(mod_ml, specs = "age", type = "response") |> 
   contrast(method = "pairwise", adjust = p_adjust, infer = TRUE)
 ```
 
 ```{r fig.width = 4, fig.height = 5}
-make_signif_boxplot(mod_bnip3_gamma, xaxis = "age", adjust = p_adjust)
+make_signif_boxplot(mod_ml, xaxis = "age", adjust = p_adjust)
 ```
 
-**Condition:Age**
+**Genotype:Age**
+
+Genotype within Age:
 
 ```{r}
-emmeans(mod_bnip3_gamma, specs = ~ condition | age, type = "response") |> 
+emmeans(mod_ml, specs = ~ genotype | age, type = "response") |> 
   contrast(method = "pairwise", adjust = "none", infer = TRUE) |> 
   as.data.frame() |> 
-  modify_at("p.value", \(x) p.adjust(x, method = "holm"))
-
-cli_h2("[Interaction]")
-
-emmeans(mod_bnip3_gamma, specs = ~ condition | age, type = "response") |>
-  contrast(interaction = "pairwise", by = NULL, adjust = "none", infer = TRUE) |> 
-  as.data.frame() |> 
-  modify_at("p.value", \(x) p.adjust(x, method = "holm"))
+  modify_at("p.value", \(x) p.adjust(x, method = p_adjust))
 ```
 
 ```{r fig.width = 14, fig.height = 6}
-make_signif_boxplot(mod_bnip3_gamma, xaxis = "condition", facet = "age", ncol = 4, max_points = Inf, adjust = p_adjust) |> 
-  save_png("mod_bnip3_gamma", width = 14, height = 7, display = TRUE)
+make_signif_boxplot(mod_ml, xaxis = "genotype", facet = "age", ncol = 4, max_points = Inf, adjust = p_adjust) |>
+  save_png("mod_ml_genotype_age", width = 14, height = 7, display = TRUE)
+```
+
+Age within Genotype:
+
+```{r}
+emmeans(mod_ml, specs = ~ age | genotype, type = "response") |> 
+  contrast(method = "pairwise", adjust = "none", infer = TRUE) |> 
+  as.data.frame() |> 
+  modify_at("p.value", \(x) p.adjust(x, method = p_adjust))
+```
+
+```{r fig.width = 14, fig.height = 6}
+make_signif_boxplot(mod_ml, xaxis = "age", facet = "genotype", ncol = 4, max_points = Inf, adjust = p_adjust) |>
+  save_png("mod_ml_age_genotype", width = 14, height = 7, display = TRUE)
+```
+
+Difference in Genotype's effect between Ages:
+
+```{r}
+emmeans(mod_ml, specs = ~ genotype | age, type = "response") |>
+  contrast(interaction = "pairwise", by = NULL, adjust = "none", infer = TRUE) |> 
+  as.data.frame() |> 
+  modify_at("p.value", \(x) p.adjust(x, method = p_adjust))
 ```
 
 ```{r fig.height = 6, fig.width = 14}
 make_signif_boxplot_inter(
-  mod_bnip3_gamma, pred1 = "condition", pred2 = "age", facet = NULL, 
+  mod_ml, pred1 = "genotype", pred2 = "age", facet = NULL, 
   cluster = "rat", add_cluster_averages = TRUE, ncol = 5, max_points = Inf, adjust = p_adjust
 ) |> 
-  save_png("mod_bnip3_gamma_inter", width = 14, height = 7)
-```
-
-```{r fig.width = 14, fig.height = 6}
-make_signif_boxplot(mod_bnip3_gamma, xaxis = "age", facet = "condition", ncol = 4, max_points = Inf, adjust = p_adjust) |> 
-  save_png("mod_bnip3_gamma_age", width = 14, height = 7, display = TRUE)
+  save_png("mod_ml_genotype_age_inter", width = 14, height = 7)
 ```
